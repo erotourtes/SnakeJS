@@ -8,6 +8,10 @@ class Point {
     this.x += vector.x;
     this.y += vector.y;
   }
+
+  raw() {
+    return [this.x, this.y];
+  }
 }
 
 export default Point;

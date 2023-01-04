@@ -3,6 +3,8 @@ import { Application, Graphics } from "pixi.js";
 import UiSnake from "./uiSnake.js";
 import Field from "./field.js";
 
+import Point from "./point.js";
+
 // const snake = new Snake(0, 0);
 // const field = new Field();
 //
@@ -29,15 +31,15 @@ class Game {
   createApp() {
     this.app = new Application({width: window.innerWidth, height: innerHeight});
     document.body.appendChild(this.app.view);
-    this.app.renderer.backgroundColor = 0x00FF40;
+    this.app.renderer.background.color = 0x00FF40;
 
     this.app.renderer.view.style.position = "absolute";
     this.app.renderer.view.style.display = "block";
   }
 
   createSnake() {
-    this.snake = new UiSnake(this.tileSize, (el) => this.app.stage.addChild(el));
-
+    const canvaSize = new Point(this.app.renderer.width, this.app.renderer.height);
+    this.snake = new UiSnake(this.tileSize, canvaSize, (el) => this.app.stage.addChild(el));
   }
 
 }

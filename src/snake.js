@@ -16,12 +16,12 @@ class Snake {
     right: "left",
   };
 
-  _currentDirection = "left";
-  _speed = 1;
-  _body = [new Point(0, 0)];
+  _currentDirection = "stoped";
+  _speed = 20;
+  _body = [];
 
-  constructor() {
-    console.log("Snake created");
+  constructor(coordinates) {
+    this._body.push(coordinates);
   }
 
   changeDirection(direction) {
@@ -30,7 +30,6 @@ class Snake {
       return;
 
     this._currentDirection = direction;
-    console.log("direction changed", this._currentDirection);
   }
 
   move() {
@@ -38,7 +37,11 @@ class Snake {
     const direction = this._directions[this._currentDirection];
     const vector = new Vector(this._speed * direction.x, this._speed * direction.y)
     head.move(vector);
-    console.log("moved", this._body);
+  }
+
+  moveInDirection(direction) {
+    this.changeDirection(direction);
+    this.move();
   }
 }
 

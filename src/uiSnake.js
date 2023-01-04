@@ -1,22 +1,23 @@
 import Snake from "./snake.js";
 import { Graphics } from "pixi.js";
+import Point from "./point.js";
 
 
 class UiSnake extends Snake {
   _bodyUI = [];
 
-  constructor(tileSize, draw) {
-    super();
+  constructor(tileSize, canvasSize, draw) {
+    super(new Point(0, 0));
     this.tileSize = tileSize;
-    this.createBodyUI();
+    this.createBodyUI(canvasSize);
     draw(this._bodyUI[0]);
 
     this.moveBody();
   }
 
-  createBodyUI() {
+  createBodyUI(canvasSize) {
     const circle = new Graphics();
-    circle.beginFill(0x0000FF).drawCircle(this.tileSize / 2, this.tileSize / 2, this.tileSize / 2).endFill();
+    circle.beginFill(0x0000FF).drawCircle(canvasSize.x / 2, canvasSize.y / 2, this.tileSize / 2).endFill();
     this._bodyUI.push(circle);
   }
 
@@ -29,15 +30,13 @@ class UiSnake extends Snake {
     };
 
     document.onkeydown = (event) => {
-      this.changeDirection(keyMap[event.code]);
-      this.move();
-      this._bodyUI[0].x = this._body[0].x * this.tileSize;
-      this._bodyUI[0].y = this._body[0].y * this.tileSize;
+      this.moveInDirection(keyMap[event.code]);
+
+      const [x, y] = this._body[0].raw();
+      this._bodyUI[0].position.set(x, y);
     };
 
   }
-
-
 
 // const keyMap = {
 //   KeyW: "up",
