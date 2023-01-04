@@ -1,13 +1,12 @@
-import Point from "./point.js";
 import Vector from "./vector.js";
 
 class Snake {
   _directions = {
-    up: { x: 0, y: -1 },
-    down: { x: 0, y: 1 },
-    left: { x: -1, y: 0 },
-    right: { x: 1, y: 0 },
-    stoped: { x: 0, y: 0 },
+    up: new Vector(0, -1),
+    down: new Vector(0, 1),
+    left: new Vector(-1, 0),
+    right: new Vector(1, 0),
+    stoped: new Vector(0, 0)
   };
 
   _forbidenDirections = {
@@ -18,7 +17,7 @@ class Snake {
   };
 
   _currentDirection = "stoped";
-  _speed = 20;
+  _speed = 5;
   _body = [];
 
   constructor(coordinates) {

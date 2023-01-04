@@ -28,7 +28,7 @@ class Game {
     this.snake = new UiSnake(this.tileSize, canvaSize, (el) => this.app.stage.addChild(el));
 
     keyPressedHandler((direction) => this.snake.changeDirection(direction));
-    setInterval(() => this.snake.updatePosition(), 200);
+    this.app.ticker.add(() => this.snake.updatePosition());
   }
 
 }
