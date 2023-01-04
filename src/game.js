@@ -36,7 +36,7 @@ class Game {
   }
 
   createSnake() {
-    this.snake = new UiSnake(0, 0, this.tileSize, this.app.stage.addChild.bind(this.app.stage));
+    this.snake = new UiSnake(this.tileSize, (el) => this.app.stage.addChild(el));
 
   }
 

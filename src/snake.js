@@ -1,4 +1,5 @@
 import Point from "./point.js";
+import Vector from "./vector.js";
 
 class Snake {
   _directions = {
@@ -17,12 +18,11 @@ class Snake {
 
   _currentDirection = "left";
   _speed = 1;
-  _body = [];
+  _body = [new Point(0, 0)];
 
-  constructor(x, y) {
+  constructor() {
     console.log("Snake created");
-    this.body = [new Point(x, y)];
- }
+  }
 
   changeDirection(direction) {
     const forbidenDir = this._forbidenDirections[this._currentDirection];
@@ -34,6 +34,11 @@ class Snake {
   }
 
   move() {
+    const head = this._body[0];
+    const direction = this._directions[this._currentDirection];
+    const vector = new Vector(this._speed * direction.x, this._speed * direction.y)
+    head.move(vector);
+    console.log("moved", this._body);
   }
 }
 

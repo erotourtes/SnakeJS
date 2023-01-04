@@ -4,9 +4,9 @@ class Point {
     this.y = y;
   }
 
-  move(coordinates) {
-    this.x += coordinates.x;
-    this.y += coordinates.y;
+  move(vector) {
+    this.x += vector.x;
+    this.y += vector.y;
   }
 }
 
