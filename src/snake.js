@@ -7,6 +7,7 @@ class Snake {
     down: { x: 0, y: 1 },
     left: { x: -1, y: 0 },
     right: { x: 1, y: 0 },
+    stoped: { x: 0, y: 0 },
   };
 
   _forbidenDirections = {
@@ -37,11 +38,6 @@ class Snake {
     const direction = this._directions[this._currentDirection];
     const vector = new Vector(this._speed * direction.x, this._speed * direction.y)
     head.move(vector);
-  }
-
-  moveInDirection(direction) {
-    this.changeDirection(direction);
-    this.move();
   }
 }
 

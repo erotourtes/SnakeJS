@@ -11,8 +11,6 @@ class UiSnake extends Snake {
     this.tileSize = tileSize;
     this.createBodyUI(canvasSize);
     draw(this._bodyUI[0]);
-
-    this.moveBody();
   }
 
   createBodyUI(canvasSize) {
@@ -21,33 +19,11 @@ class UiSnake extends Snake {
     this._bodyUI.push(circle);
   }
 
-  moveBody() {
-    const keyMap = {
-      KeyW: "up",
-      KeyS: "down",
-      KeyA: "left",
-      KeyD: "right",
-    };
-
-    document.onkeydown = (event) => {
-      this.moveInDirection(keyMap[event.code]);
-
+  updatePosition() {
+      this.move();
       const [x, y] = this._body[0].raw();
       this._bodyUI[0].position.set(x, y);
-    };
-
   }
-
-// const keyMap = {
-//   KeyW: "up",
-//   KeyS: "down",
-//   KeyA: "left",
-//   KeyD: "right",
-// };
-//
-// document.onkeydown = (event) => {
-//   snake.changeDirection(keyMap[event.code]);
-// };
 }
 
 export default UiSnake;

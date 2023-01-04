@@ -4,22 +4,8 @@ import UiSnake from "./uiSnake.js";
 import Field from "./field.js";
 
 import Point from "./point.js";
+import keyPressedHandler from "./keyPressedHandler.js";
 
-// const snake = new Snake(0, 0);
-// const field = new Field();
-//
-// const keyMap = {
-//   KeyW: "up",
-//   KeyS: "down",
-//   KeyA: "left",
-//   KeyD: "right",
-// };
-//
-// document.onkeydown = (event) => {
-//   snake.changeDirection(keyMap[event.code]);
-// };
-//
-// field.generate();
 
 class Game {
   constructor() {
@@ -40,6 +26,9 @@ class Game {
   createSnake() {
     const canvaSize = new Point(this.app.renderer.width, this.app.renderer.height);
     this.snake = new UiSnake(this.tileSize, canvaSize, (el) => this.app.stage.addChild(el));
+
+    keyPressedHandler((direction) => this.snake.changeDirection(direction));
+    setInterval(() => this.snake.updatePosition(), 200);
   }
 
 }
