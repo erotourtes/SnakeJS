@@ -16,15 +16,13 @@ class Snake {
   };
 
   _currentDirection = "left";
-
   _speed = 1;
+  _body = [];
 
   constructor(x, y) {
     console.log("Snake created");
-    this.body = [new Point(0, 0)];
-    this._x = x;
-    this._y = y;
-  }
+    this.body = [new Point(x, y)];
+ }
 
   changeDirection(direction) {
     const forbidenDir = this._forbidenDirections[this._currentDirection];
