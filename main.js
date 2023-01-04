@@ -1,7 +1,7 @@
 import Snake from "./src/snake.js";
 import Field from "./src/field.js";
 
-const snake = new Snake();
+const snake = new Snake(0, 0);
 const field = new Field();
 
 const keyMap = {
@@ -12,7 +12,7 @@ const keyMap = {
 };
 
 document.onkeydown = (event) => {
-  snake.move(keyMap[event.code]);
+  snake.changeDirection(keyMap[event.code]);
 };
 
 field.generate();

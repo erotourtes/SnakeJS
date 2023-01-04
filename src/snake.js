@@ -8,17 +8,31 @@ class Snake {
     right: { x: 1, y: 0 },
   };
 
-  currentDirection = "left";
+  _forbidenDirections = {
+    up: "down",
+    down: "up",
+    left: "right",
+    right: "left",
+  };
 
-  constructor() {
+  _currentDirection = "left";
+
+  constructor(x, y) {
     console.log("Snake created");
     this.body = [new Point(0, 0)];
+    this.x = x;
+    this.y = y;
   }
 
-  move(direction) {
-    direction = direction || this.currentDirection;
-    const dir = this._directions[direction];
-    this.body[0].move(dir);
+  changeDirection(direction) {
+    if(this._forbidenDirections[this._currentDirection] === direction)
+      return;
+
+    this._currentDirection = direction;
+    console.log("direction changed", this._currentDirection);
+  }
+
+  move() {
   }
 }
 
