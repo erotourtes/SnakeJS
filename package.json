@@ -5,8 +5,13 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "live-server"
+    "start": "npx serve"
   },
   "author": "erotourtes",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "http-server": "^14.1.1",
+    "pixi.js": "^7.0.5",
+    "serve": "^14.1.2"
+  }
 }
