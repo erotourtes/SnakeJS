@@ -4,6 +4,11 @@ class Vector {
     this._y = y;
   }
 
+  multiply(value) {
+    this._x *= value;
+    this._y *= value;
+  }
+
   get x() {
     return this._x;
   }

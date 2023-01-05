@@ -17,11 +17,11 @@ class Snake {
   };
 
   _currentDirection = "stoped";
-  _speed = 5;
   _body = [];
 
-  constructor(coordinates) {
+  constructor(coordinates, speed) {
     this._body.push(coordinates);
+    this._speed = speed;
   }
 
   changeDirection(direction) {

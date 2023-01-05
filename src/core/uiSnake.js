@@ -7,7 +7,7 @@ class UiSnake extends Snake {
   _bodyUI = [];
 
   constructor(tileSize, canvasSize, draw) {
-    super(new Point(0, 0));
+    super(new Point(0, 0), tileSize);
     this.tileSize = tileSize;
     this.createBodyUI(canvasSize);
     draw(this._bodyUI[0]);

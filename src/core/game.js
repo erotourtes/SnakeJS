@@ -21,16 +21,19 @@ class Game {
 
     this.app.renderer.view.style.position = "absolute";
     this.app.renderer.view.style.display = "block";
+
+    this.gameContainer = new Graphics();
+    this.app.stage.addChild(this.gameContainer);
   }
 
   createSnake() {
     const canvaSize = new Point(this.app.renderer.width, this.app.renderer.height);
-    this.snake = new UiSnake(this.tileSize, canvaSize, (el) => this.app.stage.addChild(el));
+    this.snake = new UiSnake(this.tileSize, canvaSize, (el) => this.gameContainer.addChild(el));
 
     keyPressedHandler((direction) => this.snake.changeDirection(direction));
-    this.app.ticker.add(() => this.snake.updatePosition());
-  }
 
+    setInterval(() => this.snake.updatePosition(), 100);
+  }
 }
 
 export default Game;
