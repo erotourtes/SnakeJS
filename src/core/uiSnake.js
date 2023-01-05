@@ -11,10 +11,7 @@ class UiSnake extends Snake {
     super(new Point(0, 0), tileSize);
     this.tileSize = tileSize;
 
-    if (canvasSize.isEvenX()) 
-      canvasSize.move(new Vector(tileSize, 0));
-    if (canvasSize.isEvenY())
-      canvasSize.move(new Vector(0, tileSize));
+    this.handleWorldPosition(canvasSize, tileSize);
     this.createBodyUI(canvasSize);
 
     draw(this._bodyUI[0]);
@@ -30,6 +27,13 @@ class UiSnake extends Snake {
       this.move();
       const [x, y] = this._body[0].raw();
       this._bodyUI[0].position.set(x, y);
+  }
+
+  handleWorldPosition(position, tileSize) {
+    if ((position.x / tileSize) % 2 === 0)
+      position.move(new Vector(-tileSize, 0));
+    if((position.y / tileSize) % 2 === 0)
+      position.move(new Vector(0, -tileSize));
   }
 }
 
