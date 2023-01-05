@@ -5,10 +5,7 @@ class Field {
       .fill(null)
       .map(() => new Array(size.x).fill(0));
 
-
     this.createObstacles(obstaclesCount);
-    console.log('Map generated');
-    console.log(this.field);
   }
 
   createObstacles(count) {
