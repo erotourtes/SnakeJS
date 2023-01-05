@@ -1,7 +1,7 @@
 import { Application, Container, Graphics, RenderTexture, Sprite, Texture } from "pixi.js";
 
 import UiSnake from "./uiSnake.js";
-import Field from "./field.js";
+import UiField from "./uiField.js";
 
 import Point from "./point.js";
 import keyPressedHandler from "./keyPressedHandler.js";
@@ -12,7 +12,13 @@ class Game {
     this.tileSize = 50;
     this.createApp();
     this.createGameContainer();
+    this.createField();
     this.createSnake();
+  }
+
+  createField() {
+    this.field = new UiField(new Point(this._gameWidth, this._gameHeight), this.tileSize);
+    this.field.draw((el) => this.gameContainer.addChild(el));
   }
 
   createApp() {
