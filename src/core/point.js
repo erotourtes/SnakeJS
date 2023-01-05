@@ -12,6 +12,15 @@ class Point {
   raw() {
     return [this.x, this.y];
   }
+
+  isEvenX() {
+    return this.x % 2 === 0;
+  }
+
+  isEvenY() {
+    return this.y % 2 === 0;
+  }
+
 }
 
 export default Point;

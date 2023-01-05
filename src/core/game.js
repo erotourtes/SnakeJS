@@ -1,4 +1,4 @@
-import { Application, Graphics } from "pixi.js";
+import { Application, Container, Graphics, RenderTexture, Sprite, Texture } from "pixi.js";
 
 import UiSnake from "./uiSnake.js";
 import Field from "./field.js";
@@ -11,6 +11,7 @@ class Game {
   constructor() {
     this.tileSize = 50;
     this.createApp();
+    this.fixedContainer();
     this.createSnake();
   }
 
@@ -21,18 +22,51 @@ class Game {
 
     this.app.renderer.view.style.position = "absolute";
     this.app.renderer.view.style.display = "block";
+  }
 
-    this.gameContainer = new Graphics();
+  fixedContainer() {
+    this.gameContainer = new Container();
     this.app.stage.addChild(this.gameContainer);
+    const bg = new Sprite(Texture.WHITE);
+    this.gameWidth = this.tileSize * 10;
+    this.gameHeigth = this.tileSize * 10;
+    // this.gameHeigth = this.app.screen.height - this.app.screen.height % this.tileSize;
+    bg.width = this.gameWidth;
+    bg.height = this.gameHeigth;
+    bg.tint = 0xff0000;
+    bg.zIndex = -1;
+    this.gameContainer.addChild(bg);
+
+    for (let i = 0; i < Math.min(this.gameWidth / this.tileSize); i++) {
+      const line = new Graphics();
+      line.lineStyle(1, 0x6D545D)
+        .moveTo(i * this.tileSize, 0)
+        .lineTo(i * this.tileSize, this.gameHeigth);
+      this.gameContainer.addChild(line);
+    }
+
+    console.log(this.gameContainer.children)
+
   }
 
   createSnake() {
-    const canvaSize = new Point(this.app.renderer.width, this.app.renderer.height);
+    // const canvaSize = new Point(this.gameContainer.width, this.gameContainer.height);
+    const canvaSize = new Point(this.gameWidth, this.gameHeigth);
     this.snake = new UiSnake(this.tileSize, canvaSize, (el) => this.gameContainer.addChild(el));
 
     keyPressedHandler((direction) => this.snake.changeDirection(direction));
+    this.gameLoop(() => this.snake.updatePosition());
+  }
 
-    setInterval(() => this.snake.updatePosition(), 100);
+  gameLoop(cb) {
+    let seconds = 0;
+    this.app.ticker.add((delta) => {
+      seconds += (1 / 60) * delta;
+      if(seconds >= 0.2 ){
+        cb();
+        seconds = 0;
+      }
+    });
   }
 }
 
@@ -100,9 +134,9 @@ export default Game;
 
 // app.loader.shared.add("https://picsum.photos/200").load(setup);
 
-function setup() {
-  const sprite = new PIXI.Sprite(
-    PIXI.Loader.shared.resources["https://picsum.photos/200"].texture
-  );
+// function setup() {
+//   const sprite = new PIXI.Sprite(
+//     PIXI.Loader.shared.resources["https://picsum.photos/200"].texture
+//   );
   //This code will run when the loader has finished loading the image
-}
+// }
