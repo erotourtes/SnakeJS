@@ -8,7 +8,7 @@ class UiField extends Field {
     this.pixelSize = pixelSize;
     this.tileSize = tileSize;
 
-    const parsedSize = ParseTiles.parse(pixelSize, tileSize);
+    const parsedSize = ParseTiles.parseToTiles(pixelSize, tileSize);
 
     this.generate(parsedSize, 10);
   }

@@ -2,6 +2,7 @@ import Snake from "./snake.js";
 import { Graphics } from "pixi.js";
 import Point from "./point.js";
 import Vector from "./vector.js";
+import ParseTiles from "./utils/parseTiles.js";
 
 
 class UiSnake extends Snake {
@@ -27,7 +28,13 @@ class UiSnake extends Snake {
       const [x, y] = this.head.raw();
       this._bodyUI[0].position.set(x, y);
 
-    console.log(this.worldPosition);
+    const tilePosition = ParseTiles.parseToTiles(this.worldPosition, this.tileSize);
+    if (obstacleHandler.isCollide(tilePosition)) {
+      this.lost();
+    }
+
+    const [x, y] = this.head.raw();
+    this._bodyUI[0].position.set(x, y);
   }
 
   handleSpawnPosition(position, tileSize) {
