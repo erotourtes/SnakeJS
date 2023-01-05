@@ -1,6 +1,6 @@
 class Field {
   generate(size, obstaclesCount) {
-    this.size = size;
+    this.pixelSize = size;
     this.field = new Array(size.y)
       .fill(null)
       .map(() => new Array(size.x).fill(0));
@@ -10,8 +10,8 @@ class Field {
 
   createObstacles(count) {
     for (let i = 0; i < count; i++) {
-      const x = Math.floor(Math.random() * this.size.x);
-      const y = Math.floor(Math.random() * this.size.y);
+      const x = Math.floor(Math.random() * this.pixelSize.x);
+      const y = Math.floor(Math.random() * this.pixelSize.y);
       this.field[y][x] = 1;
     }
   }
