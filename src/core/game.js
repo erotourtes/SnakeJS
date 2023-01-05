@@ -11,7 +11,7 @@ class Game {
   constructor() {
     this.tileSize = 50;
     this.createApp();
-    this.fixedContainer();
+    this.createGameContainer();
     this.createSnake();
   }
 
@@ -24,34 +24,38 @@ class Game {
     this.app.renderer.view.style.display = "block";
   }
 
-  fixedContainer() {
+  createGameContainer() {
     this.gameContainer = new Container();
+    this.gameContainer.position.set(this._paddingLeft, this._paddingTop);
     this.app.stage.addChild(this.gameContainer);
-    const bg = new Sprite(Texture.WHITE);
-    this.gameWidth = this.tileSize * 10;
-    this.gameHeigth = this.tileSize * 10;
-    // this.gameHeigth = this.app.screen.height - this.app.screen.height % this.tileSize;
-    bg.width = this.gameWidth;
-    bg.height = this.gameHeigth;
-    bg.tint = 0xff0000;
-    bg.zIndex = -1;
-    this.gameContainer.addChild(bg);
 
-    for (let i = 0; i < Math.min(this.gameWidth / this.tileSize); i++) {
+    this.gameContainer.addChild(this._spriteForGameContainer);
+
+    this._drawLines();
+  }
+
+  _drawLines() {
+    for (let i = 0; i < Math.min(this._gameWidth / this.tileSize); i++) {
       const line = new Graphics();
       line.lineStyle(1, 0x6D545D)
         .moveTo(i * this.tileSize, 0)
-        .lineTo(i * this.tileSize, this.gameHeigth);
+        .lineTo(i * this.tileSize, this._gameHeight);
       this.gameContainer.addChild(line);
     }
+  }
 
-    console.log(this.gameContainer.children)
+  get _spriteForGameContainer() {
+    const bg = new Sprite(Texture.WHITE);
+    bg.width = this._gameWidth;
+    bg.height = this._gameHeight;
+    bg.tint = 0xff0000;
+    bg.zIndex = -1;
 
+    return bg;
   }
 
   createSnake() {
-    // const canvaSize = new Point(this.gameContainer.width, this.gameContainer.height);
-    const canvaSize = new Point(this.gameWidth, this.gameHeigth);
+    const canvaSize = new Point(this._gameWidth, this._gameHeight);
     this.snake = new UiSnake(this.tileSize, canvaSize, (el) => this.gameContainer.addChild(el));
 
     keyPressedHandler((direction) => this.snake.changeDirection(direction));
@@ -67,6 +71,30 @@ class Game {
         seconds = 0;
       }
     });
+  }
+
+  get _intAppWidth() {
+    return this.app.screen.width - this.app.screen.width % this.tileSize;
+  }
+
+  get _intAppHeight() {
+    return this.app.screen.height - this.app.screen.height % this.tileSize;
+  }
+
+  get _gameWidth() {
+    return this._intAppWidth * 0.8 - (this._intAppWidth * 0.8) % this.tileSize;
+  }
+
+  get _gameHeight() {
+    return this._intAppHeight * 0.8 - (this._intAppHeight * 0.8) % this.tileSize;
+  }
+
+  get _paddingLeft() {
+    return (this.app.screen.width - this._gameWidth) / 2;
+  }
+
+  get _paddingTop() {
+    return (this.app.screen.height - this._gameHeight) / 2;
   }
 }
 
