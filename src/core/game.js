@@ -1,10 +1,11 @@
-import { Application, Container, Graphics, RenderTexture, Sprite, Texture } from "pixi.js";
+import { Application, Container, Graphics, Sprite, Texture, Text } from "pixi.js";
 
 import UiSnake from "./uiSnake.js";
 import UiField from "./uiField.js";
 
 import Point from "./point.js";
 import keyPressedHandler from "./keyPressedHandler.js";
+import ObstacleHandler from "./obstacleHandler.js";
 
 
 class Game {
@@ -14,6 +15,7 @@ class Game {
     this.createGameContainer();
     this.createField();
     this.createSnake();
+    this.gameLoop();
   }
 
   createField() {
@@ -64,19 +66,53 @@ class Game {
     const canvaSize = new Point(this._gameWidth, this._gameHeight);
     this.snake = new UiSnake(this.tileSize, canvaSize, (el) => this.gameContainer.addChild(el));
 
+    const lostSymbol = Symbol("lost");
+    this.snake.onLost(() => {
+      this.app.stage.addChild(this.gameOverContainer)
+      this.gameLoopCbs.delete(lostSymbol);
+    });
+
     keyPressedHandler((direction) => this.snake.changeDirection(direction));
-    this.gameLoop(() => this.snake.updatePosition());
+
+    const obstacleHandler = new ObstacleHandler(this.field.field);
+    this.gameLoopCbs.set(lostSymbol, () => {
+      this.snake.updatePosition(obstacleHandler)
+    });
   }
 
-  gameLoop(cb) {
+  gameLoop() {
     let seconds = 0;
     this.app.ticker.add((delta) => {
       seconds += (1 / 60) * delta;
       if(seconds >= 0.2 ){
-        cb();
+        this.gameLoopCbs
+          .forEach((cb) => cb());
+
         seconds = 0;
       }
     });
+  }
+
+  gameLoopCbs = new Map();
+
+  get gameOverContainer() {
+    const container = new Container();
+    container.position.set(this._paddingLeft, this._paddingTop);
+    container.zIndex = 1;
+
+    container.addChild(this._spriteForGameContainer);
+
+    const text = new Text("Game Over", {
+      fontFamily: "Arial",
+      fontSize: 36,
+      fill: "deeppink",
+      stroke: "#ff3300",
+      strokeThickness: 4,
+    });
+
+    container.addChild(text);
+
+    return container;
   }
 
   get _intAppWidth() {

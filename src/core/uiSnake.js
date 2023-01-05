@@ -23,10 +23,8 @@ class UiSnake extends Snake {
     this._bodyUI.push(circle);
   }
 
-  updatePosition() {
-      this.move();
-      const [x, y] = this.head.raw();
-      this._bodyUI[0].position.set(x, y);
+  updatePosition(obstacleHandler) {
+    this.move();
 
     const tilePosition = ParseTiles.parseToTiles(this.worldPosition, this.tileSize);
     if (obstacleHandler.isCollide(tilePosition)) {

@@ -16,12 +16,16 @@ class Snake {
     right: "left",
   };
 
+  onLostEvent = [];
+
   _currentDirection = "stoped";
   _body = [];
 
   constructor(coordinates, speed) {
     this._body.push(coordinates);
     this._speed = speed;
+    this.alive = true;
+    this.event = {};
   }
 
   changeDirection(direction) {
@@ -37,6 +41,15 @@ class Snake {
     const direction = this._directions[this._currentDirection];
     const vector = new Vector(this._speed * direction.x, this._speed * direction.y)
     head.move(vector);
+  }
+
+  onLost(cb) {
+    this.onLostEvent.push(cb);
+  }
+
+  lost() {
+    this.alive = false;
+    this.onLostEvent.forEach(cb => cb());
   }
 }
 
