@@ -8,10 +8,11 @@ import ParseTiles from "./utils/parseTiles.js";
 class UiSnake extends Snake {
   _bodyUI = [];
 
-  constructor(tileSize, canvasSize, draw) {
+  constructor(tileSize, canvasSize, obstacleHandler, draw) {
     super(new Point(0, 0), tileSize);
     this.tileSize = tileSize;
-    this.handleSpawnPosition(canvasSize, tileSize);
+    this.obstacleHandler = obstacleHandler;
+    this.startPosition = this.handleSpawnPosition(canvasSize, tileSize);
     this.createBodyUI();
 
     draw(this._bodyUI[0]);
@@ -23,11 +24,11 @@ class UiSnake extends Snake {
     this._bodyUI.push(circle);
   }
 
-  updatePosition(obstacleHandler) {
+  updatePosition() {
     this.move();
 
     const tilePosition = ParseTiles.parseToTiles(this.worldPosition, this.tileSize);
-    if (obstacleHandler.isCollide(tilePosition)) {
+    if (this.obstacleHandler.isCollide(tilePosition)) {
       this.lost();
     }
 
@@ -35,15 +36,23 @@ class UiSnake extends Snake {
     this._bodyUI[0].position.set(x, y);
   }
 
-  handleSpawnPosition(position, tileSize) {
-    this.startPosition = Point.of(position);
+  handleSpawnPosition(mapSize, tileSize) {
+    const startPosition = Point.of(mapSize);
 
-    if ((this.startPosition.x / tileSize) % 2 === 0)
-      this.startPosition.move(new Vector(-tileSize, 0));
-    if((this.startPosition.y / tileSize) % 2 === 0)
-      this.startPosition.move(new Vector(0, -tileSize));
+    if ((startPosition.x / tileSize) % 2 === 0)
+    startPosition.move(new Vector(-tileSize, 0));
+    if((startPosition.y / tileSize) % 2 === 0)
+    startPosition.move(new Vector(0, -tileSize));
 
-    this.startPosition.divide(2);
+    startPosition.divide(2);
+
+    let tilesPosition = ParseTiles.parseToTiles(startPosition, tileSize);
+    while(!this.obstacleHandler.canCreate(tilesPosition)) {
+      startPosition.move(new Vector(tileSize, 0));
+      tilesPosition = ParseTiles.parseToTiles(startPosition, tileSize);
+    }
+
+    return startPosition;
   }
 
   get worldPosition() {
