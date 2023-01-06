@@ -1,6 +1,6 @@
-import Point from "./point.js";
+import { Point } from "../core/physics/module.js";
 import { Graphics } from "pixi.js";
-import ParseTiles from "./utils/parseTiles.js";
+import ParseTiles from "../utils/parseTiles.js";
 
 
 class Fruit {

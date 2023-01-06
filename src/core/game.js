@@ -1,12 +1,12 @@
 import { Application, Container, Graphics, Sprite, Texture, Text } from "pixi.js";
 
-import UiSnake from "./uiSnake.js";
-import UiField from "./uiField.js";
+import UiSnake from "../snake/module.js";
+import UiField from "../field/module.js";
 
-import Point from "./point.js";
-import keyPressedHandler from "./keyPressedHandler.js";
-import ObstacleHandler from "./obstacleHandler.js";
-import Fruit from "./fruit.js";
+import { Point } from "./physics/module.js";
+import { keyPressedHandler, ObstacleHandler } from "./handlers/module.js";
+
+import Fruit from "../fruit/fruit.js";
 
 
 class Game {

@@ -1,4 +1,4 @@
-import Vector from "./vector.js";
+import Vector from "../core/physics/vector.js";
 
 class Snake {
   _directions = {

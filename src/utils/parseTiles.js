@@ -1,4 +1,4 @@
-import Point from "../point.js";
+import { Point } from "../core/physics/module.js";
 
 class ParseTiles {
   static parseToTiles(point, tileSize) {

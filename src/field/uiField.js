@@ -1,6 +1,6 @@
 import { Sprite, Texture } from "pixi.js";
 import Field from "./field.js";
-import ParseTiles from "./utils/parseTiles.js";
+import { ParseTiles } from "../utils/module.js";
 
 class UiField extends Field {
   constructor(pixelSize, tileSize, obstacleCount) {

@@ -1,8 +1,7 @@
 import Snake from "./snake.js";
 import { Graphics } from "pixi.js";
-import Point from "./point.js";
-import Vector from "./vector.js";
-import ParseTiles from "./utils/parseTiles.js";
+import { Point, Vector } from "../core/physics/module.js";
+import { ParseTiles } from "../utils/module.js";
 
 
 class UiSnake extends Snake {
