@@ -6,9 +6,12 @@ import UiField from "./uiField.js";
 import Point from "./point.js";
 import keyPressedHandler from "./keyPressedHandler.js";
 import ObstacleHandler from "./obstacleHandler.js";
+// import Fruit from "./fruit.js";
 
 
 class Game {
+  gameLoopCbs = new Map();
+
   constructor() {
     this.tileSize = 50;
     this.createApp();
@@ -16,10 +19,12 @@ class Game {
     this.createField();
     this.createSnake();
     this.gameLoop();
+
+    // this.fruit = new Fruit(this.canvaSize, this.tileSize);
   }
 
   createField() {
-    this.field = new UiField(new Point(this._gameWidth, this._gameHeight), this.tileSize);
+    this.field = new UiField(this.canvaSize, this.tileSize, 80);
     this.field.draw((el) => this.gameContainer.addChild(el));
 
     this.obstacleHandler = new ObstacleHandler(this.field.field);
@@ -54,19 +59,9 @@ class Game {
     }
   }
 
-  get _spriteForGameContainer() {
-    const bg = new Sprite(Texture.WHITE);
-    bg.width = this._gameWidth;
-    bg.height = this._gameHeight;
-    bg.tint = 0xff0000;
-    bg.zIndex = -1;
-
-    return bg;
-  }
 
   createSnake() {
-    const canvaSize = new Point(this._gameWidth, this._gameHeight);
-    this.snake = new UiSnake(this.tileSize, canvaSize, (el) => this.gameContainer.addChild(el));
+    this.snake = new UiSnake(this.tileSize, this.canvaSize, this.obstacleHandler, (el) => this.gameContainer.addChild(el));
 
     const lostSymbol = Symbol("lost");
     this.snake.onLost(() => {
@@ -94,7 +89,19 @@ class Game {
     });
   }
 
-  gameLoopCbs = new Map();
+  get _spriteForGameContainer() {
+    const bg = new Sprite(Texture.WHITE);
+    bg.width = this._gameWidth;
+    bg.height = this._gameHeight;
+    bg.tint = 0xff0000;
+    bg.zIndex = -1;
+
+    return bg;
+  }
+
+  get canvaSize () {
+    return new Point(this._gameWidth, this._gameHeight);
+  }
 
   get gameOverContainer() {
     const container = new Container();
@@ -142,72 +149,3 @@ class Game {
 }
 
 export default Game;
-
-
-
-
-// const style = new PIXI.TextStyle({
-//   fontFamily: "Arial",
-//   fontSize: 36,
-//   fill: "deeppink",
-//   stroke: "#ff3300",
-//   strokeThickness: 4,
-// });
-// const text = new PIXI.Text("Hello world", style);
-// app.stage.addChild(text);
-
-// app.ticker.add((delta) => loop(delta));
-
-// function loop(delta) {
-//   const circle = new Graphics();
-//   circle
-//     .beginFill(0x9966FF)
-//     .drawCircle(Math.random() * app.screen.width, 50, 50)
-//     .endFill();
-//
-//   app.stage.addChild(circle);
-// }
-
-// const texture = PIXI.Texture.from("https://picsum.photos/200");
-// const sprite = new PIXI.Sprite(texture);
-// app.stage.addChild(sprite);
-
-// const sprite = PIXI.Sprite.from("https://picsum.photos/200");
-// app.stage.addChild(sprite);
-
-// sprite.width = 200;
-// sprite.scale.y = 2;
-
-// sprite.position.set(100, 100);
-// sprite.rotation = 0.5;
-// sprite.anchor.set(0.5, 0.5);
-//
-// sprite.interactive = true;
-//
-// sprite.on("pointerdown", () => {
-//   sprite.scale.set(1.5);
-// });
-//
-// const container = new PIXI.Container();
-// container.addChild(sprite);
-//
-//
-// const sprite2 = PIXI.Sprite.from("https://picsum.photos/200");
-//
-// container.addChild(sprite2);
-//
-// app.stage.addChild(container);
-
-
-// PIXI.Loader.shared
-//   .add("https://picsum.photos/200")
-//   .load(setup);
-
-// app.loader.shared.add("https://picsum.photos/200").load(setup);
-
-// function setup() {
-//   const sprite = new PIXI.Sprite(
-//     PIXI.Loader.shared.resources["https://picsum.photos/200"].texture
-//   );
-  //This code will run when the loader has finished loading the image
-// }
