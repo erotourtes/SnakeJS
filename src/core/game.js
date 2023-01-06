@@ -6,7 +6,7 @@ import UiField from "../field/module.js";
 import { Point } from "./physics/module.js";
 import { keyPressedHandler, ObstacleHandler } from "./handlers/module.js";
 
-import Fruit from "../fruit/fruit.js";
+import FruitFactory from "../fruit/fruitFactory.js";
 
 
 class Game {
@@ -18,9 +18,10 @@ class Game {
     this.createGameContainer();
     this.createField();
     this.createSnake();
+    this.initFruitFactory();
     this.gameLoop();
 
-    this.fruit = new Fruit(this.canvaSize, this.tileSize, this._drawFunction, this.obstacleHandler);
+    this.createFruit();
   }
 
   createField() {
@@ -59,19 +60,40 @@ class Game {
     }
   }
 
+  initFruitFactory() {
+    this.fruitFactory = new FruitFactory(this.canvaSize, this.tileSize, this._drawFunction, this.obstacleHandler);
+
+    this.fruitFactory.onCreate((pos, prevPos) => {
+      prevPos = prevPos || pos; 
+      this.obstacleHandler.updateField(pos, prevPos, "fruit");
+    });
+  }
+
+  createFruit() {
+    this.fruitFactory.create();
+  }
 
   createSnake() {
     this.snake = new UiSnake(this.tileSize, this.canvaSize, this.obstacleHandler, this._drawFunction);
 
-    const lostSymbol = Symbol("lost");
+    const snakeID = Symbol("snake");
     this.snake.onLost(() => {
       this.app.stage.addChild(this.gameOverContainer)
-      this.gameLoopCbs.delete(lostSymbol);
+      this.gameLoopCbs.delete(snakeID);
+    });
+
+    this.snake.onMove((pos, prevPos) => {
+      console.log(pos, prevPos);
+      this.obstacleHandler.updateField(pos, prevPos, "snake");
+    });
+
+    this.snake.onEat(() => {
+      this.fruitFactory.create();
     });
 
     keyPressedHandler((direction) => this.snake.changeDirection(direction));
 
-    this.gameLoopCbs.set(lostSymbol, () => {
+    this.gameLoopCbs.set(snakeID, () => {
       this.snake.updatePosition(this.obstacleHandler)
     });
   }

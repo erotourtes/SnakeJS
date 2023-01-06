@@ -24,7 +24,7 @@ class UiSnake extends Snake {
   }
 
   updatePosition() {
-    const prevPosition = this._body[0];
+    const prevPosition = Point.of(this._body[0]);
     this.move();
 
     this.eventEmitter.emit("move", 

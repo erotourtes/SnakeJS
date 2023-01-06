@@ -10,8 +10,8 @@ class ObstacleHandler {
 
   constructor(field) {
     this.field = field;
+    this._updateAvaliableIndexes();
     this.wasUpdated = true;
-
   }
 
   isCollide(point) {
@@ -27,12 +27,16 @@ class ObstacleHandler {
   }
 
   updateField(point, prevPoint, name) {
+    const [prevX, prevY] = prevPoint.raw();
+    this.field[prevY][prevX] = "0";
+
     const [x, y] = point.raw();
     const value = this._values[name];
-    this._avaliableIndexes[x][y] = value;
+    if (name === "snake" && this.field[y][x] !== 0) // updating field first and then wathing for collision
+      return;
+    this.field[y][x] = value;
 
-    const [prevX, prevY] = prevPoint.raw();
-    this._avaliableIndexes[prevX][prevY] = 0;
+    this._updateAvaliableIndexes(); // TODO optimize
   }
 
   _updateAvaliableIndexes() {
