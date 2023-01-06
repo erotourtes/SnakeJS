@@ -21,6 +21,8 @@ class Game {
   createField() {
     this.field = new UiField(new Point(this._gameWidth, this._gameHeight), this.tileSize);
     this.field.draw((el) => this.gameContainer.addChild(el));
+
+    this.obstacleHandler = new ObstacleHandler(this.field.field);
   }
 
   createApp() {
@@ -74,9 +76,8 @@ class Game {
 
     keyPressedHandler((direction) => this.snake.changeDirection(direction));
 
-    const obstacleHandler = new ObstacleHandler(this.field.field);
     this.gameLoopCbs.set(lostSymbol, () => {
-      this.snake.updatePosition(obstacleHandler)
+      this.snake.updatePosition(this.obstacleHandler)
     });
   }
 
