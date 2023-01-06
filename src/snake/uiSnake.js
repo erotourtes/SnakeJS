@@ -24,7 +24,17 @@ class UiSnake extends Snake {
   }
 
   updatePosition() {
+    const prevPosition = this._body[0];
     this.move();
+
+    this.eventEmitter.emit("move", 
+      this.tilePosition,
+      ParseTiles.parseToTiles(this.calcWorldPosition(prevPosition), this.tileSize));
+
+    if(this.obstacleHandler.isFruit(this.tilePosition)) {
+      console.log("eat");
+      this.eventEmitter.emit("eat");
+    }
 
     const tilePosition = ParseTiles.parseToTiles(this.worldPosition, this.tileSize);
     if (this.obstacleHandler.isCollide(tilePosition)) {
@@ -54,9 +64,17 @@ class UiSnake extends Snake {
     return startPosition;
   }
 
-  get worldPosition() {
-    const circleCenter = Point.add(this.startPosition, this.head);
+  calcWorldPosition(point) {
+    const circleCenter = Point.add(this.startPosition, point);
     return Point.subtract(circleCenter, new Point(this.tileSize / 2, this.tileSize / 2));
+  }
+
+  get worldPosition() {
+    return this.calcWorldPosition(this.head);
+  }
+
+  get tilePosition() {
+    return ParseTiles.parseToTiles(this.worldPosition, this.tileSize);
   }
 
   get head() {

@@ -41,8 +41,6 @@ class Snake {
     const direction = this._directions[this._currentDirection];
     const vector = new Vector(this._speed * direction.x, this._speed * direction.y)
     head.move(vector);
-
-    this.eventEmitter.emit("move");
   }
 
   onLost(cb) {
@@ -51,6 +49,10 @@ class Snake {
 
   onMove(cb) {
     this.eventEmitter.on("move", cb);
+  }
+
+  onEat(cb) {
+    this.eventEmitter.on("eat", cb);
   }
 
   lost() {
