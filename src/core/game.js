@@ -6,7 +6,7 @@ import UiField from "./uiField.js";
 import Point from "./point.js";
 import keyPressedHandler from "./keyPressedHandler.js";
 import ObstacleHandler from "./obstacleHandler.js";
-// import Fruit from "./fruit.js";
+import Fruit from "./fruit.js";
 
 
 class Game {
@@ -20,12 +20,12 @@ class Game {
     this.createSnake();
     this.gameLoop();
 
-    // this.fruit = new Fruit(this.canvaSize, this.tileSize);
+    this.fruit = new Fruit(this.canvaSize, this.tileSize, this._drawFunction, this.obstacleHandler);
   }
 
   createField() {
     this.field = new UiField(this.canvaSize, this.tileSize, 80);
-    this.field.draw((el) => this.gameContainer.addChild(el));
+    this.field.draw(this._drawFunction);
 
     this.obstacleHandler = new ObstacleHandler(this.field.field);
   }
@@ -61,7 +61,7 @@ class Game {
 
 
   createSnake() {
-    this.snake = new UiSnake(this.tileSize, this.canvaSize, this.obstacleHandler, (el) => this.gameContainer.addChild(el));
+    this.snake = new UiSnake(this.tileSize, this.canvaSize, this.obstacleHandler, this._drawFunction);
 
     const lostSymbol = Symbol("lost");
     this.snake.onLost(() => {
@@ -87,6 +87,11 @@ class Game {
         seconds = 0;
       }
     });
+  }
+
+
+  get _drawFunction() {
+    return (el) => this.gameContainer.addChild(el);
   }
 
   get _spriteForGameContainer() {

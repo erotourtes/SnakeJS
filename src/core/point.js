@@ -18,6 +18,11 @@ class Point {
     this.y /= number;
   }
 
+  subtract(value) {
+    this.x -= value;
+    this.y -= value;
+  }
+
   static subtract(point1, point2) {
     return new Point(point1.x - point2.x, point1.y - point2.y);
   }
