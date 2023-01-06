@@ -1,4 +1,5 @@
 import Vector from "../core/physics/vector.js";
+import { EventEmitter } from "../utils/module.js";
 
 class Snake {
   _directions = {
@@ -16,8 +17,6 @@ class Snake {
     right: "left",
   };
 
-  onLostEvent = [];
-
   _currentDirection = "stoped";
   _body = [];
 
@@ -25,7 +24,8 @@ class Snake {
     this._body.push(coordinates);
     this._speed = speed;
     this.alive = true;
-    this.event = {};
+    this.eventEmitter = new EventEmitter();
+
   }
 
   changeDirection(direction) {
@@ -41,15 +41,21 @@ class Snake {
     const direction = this._directions[this._currentDirection];
     const vector = new Vector(this._speed * direction.x, this._speed * direction.y)
     head.move(vector);
+
+    this.eventEmitter.emit("move");
   }
 
   onLost(cb) {
-    this.onLostEvent.push(cb);
+    this.eventEmitter.on("lost", cb);
+  }
+
+  onMove(cb) {
+    this.eventEmitter.on("move", cb);
   }
 
   lost() {
     this.alive = false;
-    this.onLostEvent.forEach(cb => cb());
+    this.eventEmitter.emit("lost");
   }
 }
 
