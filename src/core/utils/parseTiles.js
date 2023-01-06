@@ -2,8 +2,8 @@ import Point from "../point.js";
 
 class ParseTiles {
   static parseToTiles(point, tileSize) {
-    const numOFTilesX = point.x / tileSize;
-    const numOFTilesY = point.y / tileSize;
+    const numOFTilesX = Math.floor(point.x / tileSize);
+    const numOFTilesY = Math.floor(point.y / tileSize);
 
     return new Point(numOFTilesX, numOFTilesY);
   }
