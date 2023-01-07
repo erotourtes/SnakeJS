@@ -13,15 +13,13 @@ class Game {
   gameLoopCbs = new Map();
 
   constructor() {
-    this.containerManager = new ContainerManager(50);
+    this.containerManager = new ContainerManager(64);
     ParseTiles.tileSize = this.containerManager.tileSize;
 
     this.createField();
     this.createSnake();
     this.initFruitFactory();
     this.gameLoop();
-
-    this.createFruit();
   }
 
   get rawData() {
@@ -46,7 +44,9 @@ class Game {
     this.fruitFactory.onCreate((pos, prevPos, fruit) => {
       prevPos = prevPos || pos; 
       this.obstacleHandler.updateField(pos, prevPos, "fruit");
-    }) 
+    });
+
+    this.createFruit();
   }
 
   createFruit() {
