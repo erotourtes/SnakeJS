@@ -7,21 +7,22 @@ import { ParseTiles } from "../utils/module.js";
 class UiSnake extends Snake {
   _bodyUI = [];
 
-  constructor({tileSize, canvasSize, obstacleHandler, draw}) {
+  constructor({tileSize, obstacleHandler, draw}) {
     super(new Point(0, 0), tileSize);
     this.tileSize = tileSize;
     this.draw = draw;
     this.obstacleHandler = obstacleHandler;
-    this.startPosition = this.handleSpawnPosition(canvasSize, tileSize);
+    this.startPosition = ParseTiles.parseToPixel(this.obstacleHandler.randomPosition);
+;
     this.addBodyUI(new Vector(0, 0));
   }
 
   createBodyUI() {
     const circle = new Graphics();
     circle.beginFill(0x0000FF)
-      .drawCircle(
+      .drawRect(
         ...this.startPosition .raw(), 
-        this.tileSize / 2)
+        this.tileSize, this.tileSize)
       .endFill();
     return circle;
   }
@@ -65,29 +66,8 @@ class UiSnake extends Snake {
     }
   }
 
-  // TODO refactor
-  handleSpawnPosition(mapSize, tileSize) {
-    const startPosition = Point.of(mapSize);
-
-    if ((startPosition.x / tileSize) % 2 === 0)
-    startPosition.move(new Vector(-tileSize, 0));
-    if((startPosition.y / tileSize) % 2 === 0)
-    startPosition.move(new Vector(0, -tileSize));
-
-    startPosition.divide(2);
-
-    let tilesPosition = ParseTiles.parseToTiles(startPosition);
-    while(!this.obstacleHandler.canCreate(tilesPosition)) {
-      startPosition.move(new Vector(tileSize, 0));
-      tilesPosition = ParseTiles.parseToTiles(startPosition);
-    }
-
-    return startPosition;
-  }
-
   calcWorldPosition(point) {
-    const circleCenter = Point.add(this.startPosition, point);
-    return Point.subtract(circleCenter, new Point(this.tileSize / 2, this.tileSize / 2));
+    return Point.add(this.startPosition, point);
   }
 
   get worldPosition() {
