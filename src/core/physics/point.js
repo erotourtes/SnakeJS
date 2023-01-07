@@ -32,6 +32,8 @@ class Point {
   }
 
   static of(point) {
+    if (!point)
+      return null;
     return new Point(point.x, point.y);
   }
 }

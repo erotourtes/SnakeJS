@@ -4,19 +4,31 @@ import { ParseTiles, EventEmitter } from "../utils/module.js";
 
 
 class FruitFactory {
-  constructor(canvasSize, tileSize, draw, obstacleHandler) {
+  constructor(canvasSize, tileSize, draw, obstacleHandler, remove) {
     this.canvasSize = canvasSize;
     this.tileSize = tileSize;
     this.obstacleHandler = obstacleHandler;
     this.EventEmitter = new EventEmitter();
     this.draw = draw;
+    this.remove = remove;
   }
 
   create() {
-    const prevPosition = this.position;
+    const prevPosition = Point.of(this.position);
+    this.remove(this.fruit);
+
     const fruitUi = this.fruitUi();
+    this.fruit = fruitUi;
     this.draw(fruitUi);
+
     this.EventEmitter.emit("create", this.position, prevPosition, fruitUi);
+  }
+
+  delete(fruitUi) {
+    if (fruitUi) {
+      this.remove(fruitUi);
+      this.fruitUi = null;
+    }
   }
 
   fruitUi() {

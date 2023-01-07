@@ -61,9 +61,9 @@ class Game {
   }
 
   initFruitFactory() {
-    this.fruitFactory = new FruitFactory(this.canvaSize, this.tileSize, this._drawFunction, this.obstacleHandler);
+    this.fruitFactory = new FruitFactory(this.canvaSize, this.tileSize, this._drawFunction, this.obstacleHandler, (el) => this.gameContainer.removeChild(el));
 
-    this.fruitFactory.onCreate((pos, prevPos) => {
+    this.fruitFactory.onCreate((pos, prevPos, fruit) => {
       prevPos = prevPos || pos; 
       this.obstacleHandler.updateField(pos, prevPos, "fruit");
     });
@@ -88,7 +88,7 @@ class Game {
     });
 
     this.snake.onEat(() => {
-      this.fruitFactory.create();
+      this.createFruit();
     });
 
     keyPressedHandler((direction) => this.snake.changeDirection(direction));

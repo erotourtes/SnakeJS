@@ -33,7 +33,7 @@ class UiSnake extends Snake {
 
     if(this.obstacleHandler.isFruit(this.tilePosition)) {
       console.log("eat");
-      this.eventEmitter.emit("eat");
+      this.eventEmitter.emit("eat", this.tilePosition);
     }
 
     const tilePosition = ParseTiles.parseToTiles(this.worldPosition, this.tileSize);
