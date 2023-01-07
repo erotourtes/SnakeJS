@@ -7,6 +7,7 @@ class Vector {
   multiply(value) {
     this._x *= value;
     this._y *= value;
+    return this;
   }
 
   raw() {
@@ -19,6 +20,10 @@ class Vector {
 
   get y() {
     return this._y;
+  }
+
+  static formPoint(point) {
+    return new Vector(point.x, point.y);
   }
 }
 

@@ -37,8 +37,8 @@ class UiSnake extends Snake {
     const prevPosition = Point.of(this._body[0]);
     this.move();
 
-    const tilePos = this.worldPosition.cloneToTiles();
     const prevTilesPos = this.calcWorldPosition(prevPosition).cloneToTiles();
+    const tilePos = this.handleOutOfBounds();
 
     this.eventEmitter.emit("move", tilePos, prevTilesPos);
 
@@ -46,6 +46,16 @@ class UiSnake extends Snake {
     this.handleCollide(tilePos);
 
     this.moveAllUi();
+  }
+
+  handleOutOfBounds() {
+    const tilePos = this.worldPosition.cloneToTiles();
+    const valideTilePos = this.obstacleHandler.validePoint(tilePos);
+    const validePos = valideTilePos.cloneToPixel();
+
+    this._body[0] = this.clacRelativePosition(validePos);
+
+    return valideTilePos;
   }
 
   moveAllUi() {
@@ -57,7 +67,6 @@ class UiSnake extends Snake {
 
   handleEat(tilePos, prevPosition) {
     if(this.obstacleHandler.isFruit(tilePos)) {
-      console.log("eat");
       this._body.push(prevPosition);
 
       this.addBodyUI(new Vector(...prevPosition.raw()));
@@ -78,6 +87,11 @@ class UiSnake extends Snake {
 
   get worldPosition() {
     return this.calcWorldPosition(this.head);
+  }
+
+  clacRelativePosition(point) {
+    const reversed = Vector.formPoint(this.startPosition).multiply(-1);
+    return Point.of(reversed, point);
   }
 
   get head() {

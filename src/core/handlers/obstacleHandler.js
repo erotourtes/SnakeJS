@@ -26,6 +26,22 @@ class ObstacleHandler {
     return this.field[point.y][point.x] === this._values["empty"];
   }
 
+  validePoint(point) {
+    let [x, y] = point.raw();
+    console.log(`Validation: x: ${x}, y: ${y}`);
+    if (x < 0) 
+      x = this.field[0].length - 1;
+    else if (x >= this.field[0].length)
+      x = 0;
+
+    if (y < 0)
+      y = this.field.length - 1;
+    else if (y >= this.field.length)
+      y = 0;
+
+    return new Point(x, y);
+  }
+
   updateField(point, prevPoint, name) {
     const [prevX, prevY] = prevPoint.raw();
     this.field[prevY][prevX] = this._values["empty"];

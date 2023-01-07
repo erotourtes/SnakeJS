@@ -63,7 +63,6 @@ class Game {
     });
 
     this.snake.onMove((pos, prevPos) => {
-      console.log(pos, prevPos);
       this.obstacleHandler.updateField(pos, prevPos, "snake");
     });
 
