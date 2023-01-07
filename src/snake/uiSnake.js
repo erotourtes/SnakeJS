@@ -10,19 +10,30 @@ class UiSnake extends Snake {
   constructor(tileSize, canvasSize, obstacleHandler, draw) {
     super(new Point(0, 0), tileSize);
     this.tileSize = tileSize;
+    this.draw = draw;
     this.obstacleHandler = obstacleHandler;
     this.startPosition = this.handleSpawnPosition(canvasSize, tileSize);
-    this.createBodyUI();
-
-    draw(this._bodyUI[0]);
+    this.addBodyUI(new Vector(0, 0));
   }
 
   createBodyUI() {
     const circle = new Graphics();
-    circle.beginFill(0x0000FF).drawCircle(...this.startPosition.raw(), this.tileSize / 2).endFill();
-    this._bodyUI.push(circle);
+    circle.beginFill(0x0000FF)
+      .drawCircle(
+        ...this.startPosition .raw(), 
+        this.tileSize / 2)
+      .endFill();
+    return circle;
   }
 
+  addBodyUI(vector) {
+    const bodyUI = this.createBodyUI();
+    bodyUI.position.set(...vector.raw());
+    this.draw(bodyUI);
+    this._bodyUI.push(bodyUI);
+  }
+
+  // TODO refactor
   updatePosition() {
     const prevPosition = Point.of(this._body[0]);
     this.move();
@@ -33,6 +44,10 @@ class UiSnake extends Snake {
 
     if(this.obstacleHandler.isFruit(this.tilePosition)) {
       console.log("eat");
+      this._body.push(prevPosition);
+
+      this.addBodyUI(new Vector(...prevPosition.raw()));
+
       this.eventEmitter.emit("eat", this.tilePosition);
     }
 
@@ -41,10 +56,13 @@ class UiSnake extends Snake {
       this.lost();
     }
 
-    const [x, y] = this.head.raw();
-    this._bodyUI[0].position.set(x, y);
+    for (let i = 0; i < this._bodyUI.length; i++) {
+      const [x, y] = this._body[i].raw();
+      this._bodyUI[i].position.set(x, y);
+    }
   }
 
+  // TODO refactor
   handleSpawnPosition(mapSize, tileSize) {
     const startPosition = Point.of(mapSize);
 

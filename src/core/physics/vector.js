@@ -9,6 +9,10 @@ class Vector {
     this._y *= value;
   }
 
+  raw() {
+    return [this._x, this._y];
+  }
+
   get x() {
     return this._x;
   }

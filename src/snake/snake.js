@@ -37,10 +37,24 @@ class Snake {
   }
 
   move() {
-    const head = this._body[0];
     const direction = this._directions[this._currentDirection];
     const vector = new Vector(this._speed * direction.x, this._speed * direction.y)
-    head.move(vector);
+    this.moveAll(vector);
+  }
+
+  moveAll(vector) {
+    let prevPosition = this.head.copy();
+    this.head.move(vector);
+
+    for (let i = 1; i < this._body.length; i++) {
+      const temp = this._body[i].copy();
+      this._body[i] = prevPosition;
+      prevPosition = temp;
+    }
+  }
+
+  get head() {
+    return this._body[0];
   }
 
   onLost(cb) {

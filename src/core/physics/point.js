@@ -7,11 +7,17 @@ class Point {
   move(vector) {
     this.x += vector.x;
     this.y += vector.y;
+    return this;
+  }
+
+  copy() {
+    return new Point(this.x, this.y);
   }
 
   raw() {
     return [this.x, this.y];
   }
+
 
   divide(number) {
     this.x /= number;

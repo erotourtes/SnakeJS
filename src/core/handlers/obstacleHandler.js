@@ -36,7 +36,7 @@ class ObstacleHandler {
       return;
     this.field[y][x] = value;
 
-    this._updateAvaliableIndexes(); // TODO optimize
+    // this._updateAvaliableIndexes(); // TODO optimize
   }
 
   _updateAvaliableIndexes() {

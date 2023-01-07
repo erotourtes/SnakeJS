@@ -25,7 +25,7 @@ class Game {
   }
 
   createField() {
-    this.field = new UiField(this.canvaSize, this.tileSize, 80);
+    this.field = new UiField(this.canvaSize, this.tileSize, 10);
     this.field.draw(this._drawFunction);
 
     this.obstacleHandler = new ObstacleHandler(this.field.field);
