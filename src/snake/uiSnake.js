@@ -40,7 +40,7 @@ class UiSnake extends Snake {
 
     this.eventEmitter.emit("move", 
       this.tilePosition,
-      ParseTiles.parseToTiles(this.calcWorldPosition(prevPosition), this.tileSize));
+      ParseTiles.parseToTiles(this.calcWorldPosition(prevPosition)));
 
     if(this.obstacleHandler.isFruit(this.tilePosition)) {
       console.log("eat");
@@ -51,7 +51,7 @@ class UiSnake extends Snake {
       this.eventEmitter.emit("eat", this.tilePosition);
     }
 
-    const tilePosition = ParseTiles.parseToTiles(this.worldPosition, this.tileSize);
+    const tilePosition = ParseTiles.parseToTiles(this.worldPosition);
     if (this.obstacleHandler.isCollide(tilePosition)) {
       this.lost();
     }
@@ -76,10 +76,10 @@ class UiSnake extends Snake {
 
     startPosition.divide(2);
 
-    let tilesPosition = ParseTiles.parseToTiles(startPosition, tileSize);
+    let tilesPosition = ParseTiles.parseToTiles(startPosition);
     while(!this.obstacleHandler.canCreate(tilesPosition)) {
       startPosition.move(new Vector(tileSize, 0));
-      tilesPosition = ParseTiles.parseToTiles(startPosition, tileSize);
+      tilesPosition = ParseTiles.parseToTiles(startPosition);
     }
 
     return startPosition;
@@ -95,7 +95,7 @@ class UiSnake extends Snake {
   }
 
   get tilePosition() {
-    return ParseTiles.parseToTiles(this.worldPosition, this.tileSize);
+    return ParseTiles.parseToTiles(this.worldPosition);
   }
 
   get head() {

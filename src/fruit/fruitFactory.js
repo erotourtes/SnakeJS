@@ -34,7 +34,7 @@ class FruitFactory {
   fruitUi() {
     const randPoint = this.obstacleHandler.randomPosition;
     this.position = randPoint;
-    const pixelPoint = ParseTiles.parseToPixel(randPoint, this.tileSize);
+    const pixelPoint = ParseTiles.parseToPixel(randPoint);
     const [x, y] = pixelPoint.raw();
 
     const circle = new Graphics();

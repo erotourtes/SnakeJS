@@ -7,6 +7,7 @@ import { Point } from "./physics/module.js";
 import { keyPressedHandler, ObstacleHandler } from "./handlers/module.js";
 
 import FruitFactory from "../fruit/fruitFactory.js";
+import ParseTiles from "../utils/parseTiles.js";
 
 
 class Game {
@@ -14,6 +15,7 @@ class Game {
 
   constructor() {
     this.tileSize = 50;
+    ParseTiles.tileSize = this.tileSize;
     this.createApp();
     this.createGameContainer();
     this.createField();
