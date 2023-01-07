@@ -73,6 +73,10 @@ class Snake {
     this.alive = false;
     this.eventEmitter.emit("lost");
   }
+
+  get head() {
+    return this._body[0];
+  }
 }
 
 export default Snake;
