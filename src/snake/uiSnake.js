@@ -62,6 +62,9 @@ class UiSnake extends Snake {
     for (let i = 0; i < this._bodyUI.length; i++) {
       const [x, y] = this._body[i].raw();
       this._bodyUI[i].position.set(x, y);
+
+      if (this.head.equals(this._body[i]) && i !== 0)
+        this.lost();
     }
   }
 
