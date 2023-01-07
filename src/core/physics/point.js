@@ -18,6 +18,10 @@ class Point {
     return [this.x, this.y];
   }
 
+  equals(point) {
+    return this.x === point.x && this.y === point.y;
+  }
+
 
   divide(number) {
     this.x /= number;
