@@ -1,3 +1,5 @@
+import ParseTiles from "../../utils/parseTiles.js";
+
 class Point {
   constructor(x, y) {
     this.x = x;
@@ -22,29 +24,12 @@ class Point {
     return this.x === point.x && this.y === point.y;
   }
 
-
-  divide(number) {
-    this.x /= number;
-    this.y /= number;
-  }
-
-  subtract(value) {
-    this.x -= value;
-    this.y -= value;
-  }
-
-  static subtract(point1, point2) {
-    return new Point(point1.x - point2.x, point1.y - point2.y);
-  }
-
-  static add(point1, point2) {
-    return new Point(point1.x + point2.x, point1.y + point2.y);
-  }
-
-  static of(point) {
+  static of(point, vector) {
     if (!point)
       return null;
-    return new Point(point.x, point.y);
+    if (!vector)
+      return new Point(point.x, point.y);
+    return new Point(point.x + vector.x, point.y + vector.y);
   }
 }
 

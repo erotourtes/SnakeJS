@@ -67,7 +67,7 @@ class UiSnake extends Snake {
   }
 
   calcWorldPosition(point) {
-    return Point.add(this.startPosition, point);
+    return Point.of(this.startPosition, point);
   }
 
   get worldPosition() {
