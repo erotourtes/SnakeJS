@@ -13,7 +13,7 @@ class ContainerManager {
   createApp() {
     this.app = new Application({width: window.innerWidth, height: innerHeight});
     document.body.appendChild(this.app.view);
-    this.app.renderer.background.color = 0x00FF40;
+    this.app.renderer.background.color = 0x202c39;
 
     this.app.renderer.view.style.position = "absolute";
     this.app.renderer.view.style.display = "block";
@@ -26,7 +26,7 @@ class ContainerManager {
 
     this.gameContainer.addChild(this._spriteForGameContainer);
 
-    this._drawLines();
+    // this._drawLines();
   }
 
   get rawData() {
@@ -51,11 +51,13 @@ class ContainerManager {
 
     const text = new Text("Game Over", {
       fontFamily: "Arial",
-      fontSize: 36,
-      fill: "deeppink",
-      stroke: "#ff3300",
+      fontSize: 72,
+      fill: 0x202c39,
+      stroke: 0x202c39,
       strokeThickness: 4,
     });
+
+    text.position.set(this._gameWidth / 2 - text.width / 2, this._gameHeight / 2 - text.height / 2);
 
     container.addChild(text);
 
@@ -84,7 +86,7 @@ class ContainerManager {
     const bg = new Sprite(Texture.WHITE);
     bg.width = this._gameWidth;
     bg.height = this._gameHeight;
-    bg.tint = 0xff0000;
+    bg.tint = 0xd36135;
     bg.zIndex = -1;
 
     return bg;

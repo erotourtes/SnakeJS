@@ -18,7 +18,7 @@ class UiSnake extends Snake {
 
   createBodyUI() {
     const circle = new Graphics();
-    circle.beginFill(0x0000FF)
+    circle.beginFill(0x5b8c5a)
       .drawRect(
         ...this.startPosition .raw(), 
         this.tileSize, this.tileSize)

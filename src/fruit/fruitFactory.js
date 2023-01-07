@@ -38,7 +38,7 @@ class FruitFactory {
     const [x, y] = pixelPoint.raw();
 
     const circle = new Graphics();
-    circle.beginFill(0xFF0000)
+    circle.beginFill(0xfffd98)
       .drawRect(x, y, this.tileSize, this.tileSize)
       .endFill();
 

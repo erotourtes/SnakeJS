@@ -15,18 +15,20 @@ class UiField extends Field {
   draw(draw) {
     this.field.forEach((row, y) => {
       row.forEach((cell, x) => {
-        const cellSprite = this.createSprite({ x, y, cell });
-        draw(cellSprite);
+        if (cell === 1) {
+          const cellSprite = this.createSprite({ x, y });
+          draw(cellSprite);
+        }
       });
     });
   }
 
-  createSprite({ x, y, cell}) {
+  createSprite({ x, y }) {
     const cellSprite = new Sprite(Texture.WHITE);
     cellSprite.width = this.tileSize;
     cellSprite.height = this.tileSize;
     cellSprite.position.set(x * this.tileSize, y * this.tileSize);
-    cellSprite.tint = cell === 1 ? 0x000000 : 0xffffff;
+    cellSprite.tint = 0x283845;
     return cellSprite;
   }
 }
