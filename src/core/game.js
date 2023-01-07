@@ -10,8 +10,6 @@ import FruitFactory from "../fruit/fruitFactory.js";
 import { ParseTiles } from "../utils/module.js";
 
 
-
-
 class Game {
   gameLoopCbs = new Map();
 
@@ -19,12 +17,16 @@ class Game {
     this.containerManager = new ContainerManager(64);
     ParseTiles.tileSize = this.containerManager.tileSize;
 
-    this.createField();
-    this.createSnake();
-    this.initFruitFactory();
+    this.init();
     this.gameLoop();
 
     this.effects = new Effects(this.containerManager.gameContainer);
+  }
+
+  init() {
+    this.createField();
+    this.createSnake();
+    this.initFruitFactory();
   }
 
   get rawData() {
@@ -59,12 +61,22 @@ class Game {
   }
 
   createSnake() {
-    this.snake = new UiSnake(this.rawData);
+    const [x, y] = this.rawData.canvasSize.cloneToTiles().raw();
+    const fruitWinCount =  Math.ceil(x * y / 15) + 3;
+
+    this.snake = new UiSnake(this.rawData, fruitWinCount);
 
     const snakeID = Symbol("snake");
     this.snake.onLost(() => {
-      this.containerManager.gameOverScreen();
       this.gameLoopCbs.delete(snakeID);
+      this.effects.clearNow();
+      this.containerManager.gameOverScreen(() => this.init());
+    });
+
+    this.snake.onWin(() => {
+      this.gameLoopCbs.delete(snakeID);
+      this.effects.clearNow();
+      this.containerManager.gameWinScreen(() => this.init());
     });
 
     this.snake.onMove((pos, prevPos) => {
@@ -73,7 +85,7 @@ class Game {
 
     this.snake.onEat(() => {
       this.createFruit();
-      this.effects.createEffect(this.snake._bodyUI.length * 1000);
+      this.effects.createEffect(1000);
     });
 
     keyPressedHandler((direction) => this.snake.changeDirection(direction));

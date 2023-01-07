@@ -69,9 +69,18 @@ class Snake {
     this.eventEmitter.on("eat", cb);
   }
 
+  onWin(cb) {
+    this.eventEmitter.on("win", cb);
+  }
+
   lost() {
     this.alive = false;
     this.eventEmitter.emit("lost");
+  }
+
+  win() {
+    this.alive = false;
+    this.eventEmitter.emit("win");
   }
 
   get head() {

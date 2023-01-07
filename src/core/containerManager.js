@@ -29,6 +29,11 @@ class ContainerManager {
     // this._drawLines();
   }
 
+  clearGameContainer() {
+    this.gameContainer.removeChildren();
+    this.gameContainer.addChild(this._spriteForGameContainer);
+  }
+
   get rawData() {
     return {
       draw: this.drawFunction,
@@ -38,28 +43,48 @@ class ContainerManager {
     };
   }
 
-  gameOverScreen() {
-    this.app.stage.addChild(this.gameOverContainer)
+  gameOverScreen(cb) {
+    this.app.stage.addChild(this.containerWithText("Game Over", 0x202c39, cb));
   }
 
-  get gameOverContainer() {
+  gameWinScreen(cb) {
+    this.app.stage.addChild(this.containerWithText("You Win", 0x283845, cb));
+  }
+
+  containerWithText(text, color, onClick) {
     const container = new Container();
     container.position.set(this._paddingLeft, this._paddingTop);
     container.zIndex = 1;
 
     container.addChild(this._spriteForGameContainer);
 
-    const text = new Text("Game Over", {
+
+    container.interactive = true;
+
+    const onButtonUp = () => {
+      this.app.stage.removeChild(container);
+      this.clearGameContainer();
+      onClick();
+    }
+
+    // Set interactions on our goose 
+    container
+      .on('mouseup', onButtonUp)
+      .on('mouseupoutside', onButtonUp)
+      .on('touchend', onButtonUp)
+      .on('touchendoutside', onButtonUp);
+
+    const textUi = new Text(text, {
       fontFamily: "Arial",
       fontSize: 72,
-      fill: 0x202c39,
-      stroke: 0x202c39,
+      fill: color,
+      stroke: color,
       strokeThickness: 4,
     });
 
-    text.position.set(this._gameWidth / 2 - text.width / 2, this._gameHeight / 2 - text.height / 2);
+    textUi.position.set(this._gameWidth / 2 - textUi.width / 2, this._gameHeight / 2 - textUi.height / 2);
 
-    container.addChild(text);
+    container.addChild(textUi);
 
     return container;
   }

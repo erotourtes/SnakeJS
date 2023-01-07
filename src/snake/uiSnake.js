@@ -6,13 +6,14 @@ import { Point, Vector } from "../core/physics/module.js";
 class UiSnake extends Snake {
   _bodyUI = [];
 
-  constructor({tileSize, obstacleHandler, draw}) {
+  constructor({ tileSize, obstacleHandler, draw }, winCount) {
     super(new Point(0, 0), tileSize);
     this.tileSize = tileSize;
     this.draw = draw;
     this.obstacleHandler = obstacleHandler;
     this.startPosition = this.obstacleHandler.randomPosition.cloneToPixel();
-;
+    this.fruitWinCount = winCount;
+
     this.addBodyUI(new Vector(0, 0));
   }
 
@@ -20,7 +21,7 @@ class UiSnake extends Snake {
     const circle = new Graphics();
     circle.beginFill(0x5b8c5a)
       .drawRect(
-        ...this.startPosition .raw(), 
+        ...this.startPosition.raw(), 
         this.tileSize, this.tileSize)
       .endFill();
     return circle;
@@ -43,6 +44,7 @@ class UiSnake extends Snake {
     this.eventEmitter.emit("move", tilePos, prevTilesPos);
 
     this.handleEat(tilePos, prevPosition);
+    this.handleWin();
     this.handleCollide(tilePos);
 
     this.moveAllUi();
@@ -76,6 +78,11 @@ class UiSnake extends Snake {
 
       this.eventEmitter.emit("eat", tilePos);
     }
+  }
+
+  handleWin() {
+    if(this._body.length === this.fruitWinCount)
+      this.eventEmitter.emit("win");
   }
 
   handleCollide(tilePos) {

@@ -1,6 +1,8 @@
 import { filters, Ticker } from "pixi.js";
 
 class Effects {
+  timer = null;
+
   constructor(container) {
     this.container = container;
     this.methods = {
@@ -10,6 +12,11 @@ class Effects {
       "night": this.night,
       "negative": this.negative,
     }
+  }
+
+  clearNow() {
+    this.container.filters = [];
+    clearTimeout(this.timer);
   }
 
   createEffect(ms) {
@@ -53,9 +60,10 @@ class Effects {
   }
 
   clear(ms) {
-    setTimeout(() => {
-      this.container.filters = [];
-    }, ms);
+    this.timer = 
+      setTimeout(() => {
+        this.container.filters = [];
+      }, ms);
   }
 
   colorize(ms) {
