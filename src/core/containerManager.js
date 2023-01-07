@@ -38,6 +38,10 @@ class ContainerManager {
     };
   }
 
+  gameOverScreen() {
+    this.app.stage.addChild(this.gameOverContainer)
+  }
+
   get gameOverContainer() {
     const container = new Container();
     container.position.set(this._paddingLeft, this._paddingTop);

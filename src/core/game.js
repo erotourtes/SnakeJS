@@ -13,8 +13,8 @@ class Game {
   gameLoopCbs = new Map();
 
   constructor() {
-    this.containerBuilder = new ContainerManager(50);
-    ParseTiles.tileSize = this.containerBuilder.tileSize;
+    this.containerManager = new ContainerManager(50);
+    ParseTiles.tileSize = this.containerManager.tileSize;
 
     this.createField();
     this.createSnake();
@@ -29,12 +29,12 @@ class Game {
       obstacleHandler: this.obstacleHandler,
     }
 
-    return Object.assign({}, this.containerBuilder.rawData, gameData);
+    return Object.assign({}, this.containerManager.rawData, gameData);
   }
 
   createField() {
     this.field = new UiField(this.rawData, 10);
-    this.field.draw(this.containerBuilder.drawFunction);
+    this.field.draw(this.containerManager.drawFunction);
 
     this.obstacleHandler = new ObstacleHandler(this.field.field);
   }
@@ -58,7 +58,7 @@ class Game {
 
     const snakeID = Symbol("snake");
     this.snake.onLost(() => {
-      this.containerBuilder.app.stage.addChild(this.containerBuilder.gameOverContainer)
+      this.containerManager.gameOverScreen();
       this.gameLoopCbs.delete(snakeID);
     });
 
@@ -80,7 +80,7 @@ class Game {
 
   gameLoop() {
     let seconds = 0;
-    this.containerBuilder.app.ticker.add((delta) => {
+    this.containerManager.app.ticker.add((delta) => {
       seconds += (1 / 60) * delta;
       if(seconds >= 0.2 ){
         this.gameLoopCbs
