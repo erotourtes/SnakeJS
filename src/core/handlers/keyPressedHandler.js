@@ -9,8 +9,7 @@ const keyMap = {
 const keyPressedHandler = (cb) => {
   document.onkeydown = (event) => {
     cb(keyMap[event.code]);
-
   };
-}
+};
 
 export default keyPressedHandler;

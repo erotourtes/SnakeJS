@@ -48,7 +48,7 @@ class Game {
   initFruitFactory() {
     this.fruitFactory = new FruitFactory(this.rawData);
 
-    this.fruitFactory.onCreate((pos, prevPos, fruit) => {
+    this.fruitFactory.onCreate((pos, prevPos) => {
       prevPos = prevPos || pos; 
       this.obstacleHandler.updateField(pos, prevPos, "fruit");
     });

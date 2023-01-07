@@ -30,16 +30,20 @@ class Snake {
 
   changeDirection(direction) {
     const forbidenDir = this._forbidenDirections[this._currentDirection];
-    if(direction === forbidenDir || this._directions[direction] === undefined)
-      return;
+    if(direction === forbidenDir 
+      || this._directions[direction] === undefined 
+      || !this.canChangeDirection)
+    return;
 
     this._currentDirection = direction;
+    this.canChangeDirection = false;
   }
 
   move() {
     const direction = this._directions[this._currentDirection];
     const vector = new Vector(this._speed * direction.x, this._speed * direction.y)
     this.moveAll(vector);
+    this.canChangeDirection = true;
   }
 
   moveAll(vector) {
