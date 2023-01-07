@@ -28,7 +28,7 @@ class ObstacleHandler {
 
   validePoint(point) {
     let [x, y] = point.raw();
-    console.log(`Validation: x: ${x}, y: ${y}`);
+
     if (x < 0) 
       x = this.field[0].length - 1;
     else if (x >= this.field[0].length)

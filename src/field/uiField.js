@@ -25,6 +25,7 @@ class UiField extends Field {
 
   createSprite({ x, y }) {
     const cellSprite = new Sprite(Texture.WHITE);
+    // const cellSprite = Sprite.from(`src/assets/1.png`);
     cellSprite.width = this.tileSize;
     cellSprite.height = this.tileSize;
     cellSprite.position.set(x * this.tileSize, y * this.tileSize);

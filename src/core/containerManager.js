@@ -1,4 +1,4 @@
-import { Application, Container, Graphics, Sprite, Texture, Text } from "pixi.js";
+import {filters,  Application, Container, Graphics, Sprite, Texture, Text } from "pixi.js";
 
 import { Point } from "./physics/module.js";
 

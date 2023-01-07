@@ -1,11 +1,14 @@
 import ContainerManager from "./containerManager.js";
+import Effects from "./effects.js";
+
 import UiSnake from "../snake/module.js";
 import UiField from "../field/module.js";
 
 import { keyPressedHandler, ObstacleHandler } from "./handlers/module.js";
 
 import FruitFactory from "../fruit/fruitFactory.js";
-import ParseTiles from "../utils/parseTiles.js";
+import { ParseTiles } from "../utils/module.js";
+
 
 
 
@@ -20,6 +23,8 @@ class Game {
     this.createSnake();
     this.initFruitFactory();
     this.gameLoop();
+
+    this.effects = new Effects(this.containerManager.gameContainer);
   }
 
   get rawData() {
@@ -68,6 +73,7 @@ class Game {
 
     this.snake.onEat(() => {
       this.createFruit();
+      this.effects.createEffect(this.snake._bodyUI.length * 1000);
     });
 
     keyPressedHandler((direction) => this.snake.changeDirection(direction));
