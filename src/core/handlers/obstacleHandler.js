@@ -15,28 +15,26 @@ class ObstacleHandler {
   }
 
   isCollide(point) {
-    return this.field[point.y][point.x] === 1;
+    return this.field[point.y][point.x] === this._values["obstacle"];
   }
 
   isFruit(point) {
-    return this.field[point.y][point.x] === 2;
+    return this.field[point.y][point.x] === this._values["fruit"];
   }
 
   canCreate(point) {
-    return this.field[point.y][point.x] === 0;
+    return this.field[point.y][point.x] === this._values["empty"];
   }
 
   updateField(point, prevPoint, name) {
     const [prevX, prevY] = prevPoint.raw();
-    this.field[prevY][prevX] = "0";
+    this.field[prevY][prevX] = this._values["empty"];
 
     const [x, y] = point.raw();
     const value = this._values[name];
     if (name === "snake" && this._canUpdateField(point)) // updating field first and then wathing for collision
       return;
     this.field[y][x] = value;
-
-    // this._updateAvaliableIndexes(); // TODO optimize
   }
 
   _updateAvaliableIndexes() {
@@ -44,7 +42,7 @@ class ObstacleHandler {
 
     this.field.forEach((row, y) => {
       row.forEach((cell, x) => {
-        if (cell === 0) this._avaliableIndexes.push(new Point(x, y));
+        if (cell === this._values["empty"]) this._avaliableIndexes.push(new Point(x, y));
       });
     });
   }
