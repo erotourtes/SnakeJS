@@ -24,6 +24,14 @@ class Point {
     return this.x === point.x && this.y === point.y;
   }
 
+  cloneToPixel() {
+    return ParseTiles.parseToPixel(this);
+  }
+
+  cloneToTiles() {
+    return ParseTiles.parseToTiles(this);
+  }
+
   static of(point, vector) {
     if (!point)
       return null;

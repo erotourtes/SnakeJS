@@ -1,15 +1,13 @@
 import { Sprite, Texture } from "pixi.js";
 import Field from "./field.js";
-import { ParseTiles } from "../utils/module.js";
 
 class UiField extends Field {
   constructor({canvasSize, tileSize}, obstacleCount) {
     super();
-    console.log(`creating canvas with size: ${canvasSize} and tileSize: ${tileSize}`);
     this.pixelSize = canvasSize;
     this.tileSize = tileSize;
 
-    const parsedSize = ParseTiles.parseToTiles(canvasSize);
+    const parsedSize = canvasSize.cloneToTiles();
 
     this.generate(parsedSize, obstacleCount);
   }

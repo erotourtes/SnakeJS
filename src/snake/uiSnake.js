@@ -1,7 +1,6 @@
 import Snake from "./snake.js";
 import { Graphics } from "pixi.js";
 import { Point, Vector } from "../core/physics/module.js";
-import { ParseTiles } from "../utils/module.js";
 
 
 class UiSnake extends Snake {
@@ -12,7 +11,7 @@ class UiSnake extends Snake {
     this.tileSize = tileSize;
     this.draw = draw;
     this.obstacleHandler = obstacleHandler;
-    this.startPosition = ParseTiles.parseToPixel(this.obstacleHandler.randomPosition);
+    this.startPosition = this.obstacleHandler.randomPosition.cloneToPixel();
 ;
     this.addBodyUI(new Vector(0, 0));
   }
@@ -39,21 +38,22 @@ class UiSnake extends Snake {
     const prevPosition = Point.of(this._body[0]);
     this.move();
 
-    this.eventEmitter.emit("move", 
-      this.tilePosition,
-      ParseTiles.parseToTiles(this.calcWorldPosition(prevPosition)));
+    const tilePos = this.worldPosition.cloneToTiles();
 
-    if(this.obstacleHandler.isFruit(this.tilePosition)) {
+    this.eventEmitter.emit("move", 
+      tilePos,
+      this.calcWorldPosition(prevPosition).cloneToTiles());
+
+    if(this.obstacleHandler.isFruit(tilePos)) {
       console.log("eat");
       this._body.push(prevPosition);
 
       this.addBodyUI(new Vector(...prevPosition.raw()));
 
-      this.eventEmitter.emit("eat", this.tilePosition);
+      this.eventEmitter.emit("eat", tilePos);
     }
 
-    const tilePosition = ParseTiles.parseToTiles(this.worldPosition);
-    if (this.obstacleHandler.isCollide(tilePosition)) {
+    if (this.obstacleHandler.isCollide(tilePos)) {
       this.lost();
     }
 
@@ -72,10 +72,6 @@ class UiSnake extends Snake {
 
   get worldPosition() {
     return this.calcWorldPosition(this.head);
-  }
-
-  get tilePosition() {
-    return ParseTiles.parseToTiles(this.worldPosition);
   }
 
   get head() {

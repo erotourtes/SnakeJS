@@ -1,6 +1,6 @@
 import { Point } from "../core/physics/module.js";
 import { Graphics } from "pixi.js";
-import { ParseTiles, EventEmitter } from "../utils/module.js";
+import { EventEmitter } from "../utils/module.js";
 
 
 class FruitFactory {
@@ -34,7 +34,7 @@ class FruitFactory {
   fruitUi() {
     const randPoint = this.obstacleHandler.randomPosition;
     this.position = randPoint;
-    const pixelPoint = ParseTiles.parseToPixel(randPoint);
+    const pixelPoint = randPoint.cloneToPixel();
     const [x, y] = pixelPoint.raw();
 
     const circle = new Graphics();
