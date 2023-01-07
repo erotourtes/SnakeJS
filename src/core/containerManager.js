@@ -3,7 +3,7 @@ import { Application, Container, Graphics, Sprite, Texture, Text } from "pixi.js
 import { Point } from "./physics/module.js";
 
 
-class ContainerBuilder {
+class ContainerManager {
   constructor(tileSize) {
     this.tileSize = tileSize;
     this.createApp();
@@ -27,6 +27,15 @@ class ContainerBuilder {
     this.gameContainer.addChild(this._spriteForGameContainer);
 
     this._drawLines();
+  }
+
+  get rawData() {
+    return {
+      draw: this.drawFunction,
+      remove: this.removeFunction,
+      canvasSize: this.canvaSize,
+      tileSize: this.tileSize,
+    };
   }
 
   get gameOverContainer() {
@@ -61,6 +70,10 @@ class ContainerBuilder {
 
   get drawFunction() {
     return (el) => this.gameContainer.addChild(el);
+  }
+
+  get removeFunction() {
+    return (el) => this.gameContainer.removeChild(el)
   }
 
   get _spriteForGameContainer() {
@@ -103,4 +116,4 @@ class ContainerBuilder {
 }
 
 
-export default ContainerBuilder;
+export default ContainerManager;

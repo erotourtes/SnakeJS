@@ -4,7 +4,7 @@ import { ParseTiles, EventEmitter } from "../utils/module.js";
 
 
 class FruitFactory {
-  constructor(canvasSize, tileSize, draw, obstacleHandler, remove) {
+  constructor({canvasSize, tileSize, draw, obstacleHandler, remove}) {
     this.canvasSize = canvasSize;
     this.tileSize = tileSize;
     this.obstacleHandler = obstacleHandler;

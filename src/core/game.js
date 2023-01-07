@@ -1,4 +1,4 @@
-import ContainerBuilder from "./containerBuilder.js";
+import ContainerManager from "./containerManager.js";
 import UiSnake from "../snake/module.js";
 import UiField from "../field/module.js";
 
@@ -13,10 +13,8 @@ class Game {
   gameLoopCbs = new Map();
 
   constructor() {
-    this.tileSize = 50;
-    ParseTiles.tileSize = this.tileSize;
-
-    this.containerBuilder = new ContainerBuilder(this.tileSize);
+    this.containerBuilder = new ContainerManager(50);
+    ParseTiles.tileSize = this.containerBuilder.tileSize;
 
     this.createField();
     this.createSnake();
@@ -26,8 +24,16 @@ class Game {
     this.createFruit();
   }
 
+  get rawData() {
+    const gameData = {
+      obstacleHandler: this.obstacleHandler,
+    }
+
+    return Object.assign({}, this.containerBuilder.rawData, gameData);
+  }
+
   createField() {
-    this.field = new UiField(this.containerBuilder.canvaSize, this.tileSize, 10);
+    this.field = new UiField(this.rawData, 10);
     this.field.draw(this.containerBuilder.drawFunction);
 
     this.obstacleHandler = new ObstacleHandler(this.field.field);
@@ -35,12 +41,12 @@ class Game {
 
 
   initFruitFactory() {
-    this.fruitFactory = new FruitFactory(this.containerBuilder.canvaSize, this.tileSize, this.containerBuilder.drawFunction, this.obstacleHandler, (el) => this.containerBuilder.gameContainer.removeChild(el));
+    this.fruitFactory = new FruitFactory(this.rawData);
 
     this.fruitFactory.onCreate((pos, prevPos, fruit) => {
       prevPos = prevPos || pos; 
       this.obstacleHandler.updateField(pos, prevPos, "fruit");
-    });
+    }) 
   }
 
   createFruit() {
@@ -48,7 +54,7 @@ class Game {
   }
 
   createSnake() {
-    this.snake = new UiSnake(this.tileSize, this.containerBuilder.canvaSize, this.obstacleHandler, this.containerBuilder.drawFunction);
+    this.snake = new UiSnake(this.rawData);
 
     const snakeID = Symbol("snake");
     this.snake.onLost(() => {

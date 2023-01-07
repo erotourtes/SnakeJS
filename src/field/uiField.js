@@ -3,12 +3,13 @@ import Field from "./field.js";
 import { ParseTiles } from "../utils/module.js";
 
 class UiField extends Field {
-  constructor(pixelSize, tileSize, obstacleCount) {
+  constructor({canvasSize, tileSize}, obstacleCount) {
     super();
-    this.pixelSize = pixelSize;
+    console.log(`creating canvas with size: ${canvasSize} and tileSize: ${tileSize}`);
+    this.pixelSize = canvasSize;
     this.tileSize = tileSize;
 
-    const parsedSize = ParseTiles.parseToTiles(pixelSize);
+    const parsedSize = ParseTiles.parseToTiles(canvasSize);
 
     this.generate(parsedSize, obstacleCount);
   }

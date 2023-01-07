@@ -7,7 +7,7 @@ import { ParseTiles } from "../utils/module.js";
 class UiSnake extends Snake {
   _bodyUI = [];
 
-  constructor(tileSize, canvasSize, obstacleHandler, draw) {
+  constructor({tileSize, canvasSize, obstacleHandler, draw}) {
     super(new Point(0, 0), tileSize);
     this.tileSize = tileSize;
     this.draw = draw;
