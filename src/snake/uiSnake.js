@@ -33,17 +33,29 @@ class UiSnake extends Snake {
     this._bodyUI.push(bodyUI);
   }
 
-  // TODO refactor
   updatePosition() {
     const prevPosition = Point.of(this._body[0]);
     this.move();
 
     const tilePos = this.worldPosition.cloneToTiles();
+    const prevTilesPos = this.calcWorldPosition(prevPosition).cloneToTiles();
 
-    this.eventEmitter.emit("move", 
-      tilePos,
-      this.calcWorldPosition(prevPosition).cloneToTiles());
+    this.eventEmitter.emit("move", tilePos, prevTilesPos);
 
+    this.handleEat(tilePos, prevPosition);
+    this.handleCollide(tilePos);
+
+    this.moveAllUi();
+  }
+
+  moveAllUi() {
+    for (let i = 0; i < this._bodyUI.length; i++) {
+      const [x, y] = this._body[i].raw();
+      this._bodyUI[i].position.set(x, y);
+    }
+  }
+
+  handleEat(tilePos, prevPosition) {
     if(this.obstacleHandler.isFruit(tilePos)) {
       console.log("eat");
       this._body.push(prevPosition);
@@ -52,17 +64,11 @@ class UiSnake extends Snake {
 
       this.eventEmitter.emit("eat", tilePos);
     }
+  }
 
+  handleCollide(tilePos) {
     if (this.obstacleHandler.isCollide(tilePos)) {
       this.lost();
-    }
-
-    for (let i = 0; i < this._bodyUI.length; i++) {
-      const [x, y] = this._body[i].raw();
-      this._bodyUI[i].position.set(x, y);
-
-      // if (this.head.equals(this._body[i] && i !== 0))
-      //   this.lost();
     }
   }
 
