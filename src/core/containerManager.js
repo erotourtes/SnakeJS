@@ -67,7 +67,6 @@ class ContainerManager {
       onClick();
     }
 
-    // Set interactions on our goose 
     container
       .on('mouseup', onButtonUp)
       .on('mouseupoutside', onButtonUp)
@@ -82,7 +81,9 @@ class ContainerManager {
       strokeThickness: 4,
     });
 
-    textUi.position.set(this._gameWidth / 2 - textUi.width / 2, this._gameHeight / 2 - textUi.height / 2);
+    const centerX = this._gameWidth / 2 - textUi.width / 2;
+    const centerY = this._gameHeight / 2 - textUi.height / 2;
+    textUi.position.set(centerX, centerY);
 
     container.addChild(textUi);
 
