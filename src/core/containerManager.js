@@ -85,6 +85,11 @@ class ContainerManager {
     const centerY = this._gameHeight / 2 - textUi.height / 2;
     textUi.position.set(centerX, centerY);
 
+    if (textUi.width > this._gameWidth) {
+      textUi.style.fontSize = 36;
+      textUi.position.set(centerX + textUi.width/ 2, centerY);
+    }
+
     container.addChild(textUi);
 
     return container;
