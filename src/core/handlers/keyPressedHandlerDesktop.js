@@ -6,10 +6,10 @@ const keyMap = {
   KeyQ: "stoped",
 };
 
-const keyPressedHandler = (cb) => {
+const keyPressedHandlerDesktop = (cb) => {
   document.onkeydown = (event) => {
     cb(keyMap[event.code]);
   };
 };
 
-export default keyPressedHandler;
+export default keyPressedHandlerDesktop;

@@ -103,10 +103,6 @@ class UiSnake extends Snake {
     const reversed = Vector.formPoint(this.startPosition).multiply(-1);
     return Point.of(reversed, point);
   }
-
-  get head() {
-    return this._body[0];
-  }
 }
 
 export default UiSnake;

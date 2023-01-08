@@ -48,7 +48,7 @@ class ObstacleHandler {
 
     const [x, y] = point.raw();
     const value = this._values[name];
-    if (name === "snake" && this._canUpdateField(point)) // updating field first and then wathing for collision
+    if (name === "snake" && !this._canUpdateField(point)) // updating field first and then wathing for collision
       return;
     this.field[y][x] = value;
   }
@@ -65,7 +65,7 @@ class ObstacleHandler {
 
   _canUpdateField(point) {
     const value = this.field[point.y][point.x];
-    return value !== this._values["empty"];
+    return value === this._values["empty"];
   }
 
   get randomPosition() {
