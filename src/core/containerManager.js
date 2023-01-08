@@ -1,6 +1,7 @@
-import {filters,  Application, Container, Graphics, Sprite, Texture, Text } from "pixi.js";
+import { Application, Container, Graphics, Sprite, Texture, Text } from "pixi.js";
 
 import { Point } from "./physics/module.js";
+import { isTouchDevice } from "../utils/module.js";
 
 
 class ContainerManager {
@@ -132,10 +133,14 @@ class ContainerManager {
   }
 
   get _gameWidth() {
+    if (isTouchDevice())
+      return this._intAppWidth;
     return this._intAppWidth * 0.8 - (this._intAppWidth * 0.8) % this.tileSize;
   }
 
   get _gameHeight() {
+    if (isTouchDevice())
+      return this._intAppHeight;
     return this._intAppHeight * 0.8 - (this._intAppHeight * 0.8) % this.tileSize;
   }
 

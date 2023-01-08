@@ -7,15 +7,17 @@ import UiField from "../field/module.js";
 import { keyPressedHandler, ObstacleHandler } from "./handlers/module.js";
 
 import FruitFactory from "../fruit/fruitFactory.js";
-import { ParseTiles } from "../utils/module.js";
+import { ParseTiles, isTouchDevice } from "../utils/module.js";
 
 
 class Game {
   gameLoopCbs = new Map();
 
+
   constructor() {
-    this.containerManager = new ContainerManager(64);
-    ParseTiles.tileSize = this.containerManager.tileSize;
+    const tileSize = this.calcTileSize();
+    this.containerManager = new ContainerManager(tileSize);
+    ParseTiles.tileSize = tileSize;
 
     this.init();
     this.gameLoop();
@@ -106,6 +108,12 @@ class Game {
         seconds = 0;
       }
     });
+  }
+
+  calcTileSize() {
+    if (isTouchDevice())
+      return 32;
+    return 64;
   }
 }
 
