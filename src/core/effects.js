@@ -22,6 +22,7 @@ class Effects {
   }
 
   lsd(ms, cb) {
+    this.clearNow();
     this.cb = cb;
 
     const filter = new filters.ColorMatrixFilter();
