@@ -60,28 +60,23 @@ class Game {
   }
 
   createSnake() {
-    const [x, y] = this.rawData.canvasSize.cloneToTiles().raw();
-    const fruitWinCount = Math.ceil((x * y) / 15) + 3;
-
-    this.snake = new UiSnake(this.rawData, fruitWinCount);
+    this.snake = new UiSnake(this.rawData, this.fruitWinCount);
 
     const snakeID = Symbol("snake");
-    this.snake.onLost(() => {
-      this.gameLoopCbs.delete(snakeID);
-      this.effects.clearNow();
-      this.containerManager.gameOverScreen(() => this.init());
-    });
 
-    this.snake.onWin(() => {
-      this.gameLoopCbs.delete(snakeID);
-      this.effects.clearNow();
-      this.containerManager.gameWinScreen(() => this.init());
-    });
+    this.onLostSnake(snakeID);
+    this.onWinSnake(snakeID);
+    this.onMoveSnake();
+    this.onEatSnake();
 
-    this.snake.onMove((pos, prevPos) => {
-      this.obstacleHandler.updateField(pos, prevPos, "snake");
-    });
+    keyPressedHandler((direction) => this.snake.changeDirection(direction));
 
+    this.gameLoopCbs.set(snakeID, () => {
+      this.snake.updatePosition(this.obstacleHandler);
+    });
+  }
+
+  onEatSnake() {
     this.snake.onEat((pos, count, countToWin) => {
       const { name, level } = this.fruitFactory.effect;
       const middleCount = Math.floor(countToWin / 2);
@@ -99,12 +94,33 @@ class Game {
 
       this.createFruit();
     });
+  }
 
-    keyPressedHandler((direction) => this.snake.changeDirection(direction));
+  onMoveSnake() {
+    this.snake.onMove((pos, prevPos) =>
+      this.obstacleHandler.updateField(pos, prevPos, "snake")
+    );
+  }
 
-    this.gameLoopCbs.set(snakeID, () => {
-      this.snake.updatePosition(this.obstacleHandler);
+  onWinSnake(snakeID) {
+    this.snake.onWin(() => {
+      this.gameLoopCbs.delete(snakeID);
+      this.effects.clearNow();
+      this.containerManager.gameWinScreen(() => this.init());
     });
+  }
+
+  onLostSnake(snakeID) {
+    this.snake.onLost(() => {
+      this.gameLoopCbs.delete(snakeID);
+      this.effects.clearNow();
+      this.containerManager.gameOverScreen(() => this.init());
+    });
+  }
+
+  get fruitWinCount() {
+    const [x, y] = this.rawData.canvasSize.cloneToTiles().raw();
+    return Math.ceil((x * y) / 15) + 3;
   }
 
   gameLoop() {
