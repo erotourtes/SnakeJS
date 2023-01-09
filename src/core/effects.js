@@ -46,7 +46,7 @@ class Effects {
     const filter = new filters.ColorMatrixFilter();
     this.container.filters = [filter];
 
-    this.ticker =  Ticker.shared;
+    this.ticker = Ticker.shared;
 
     let count = 0;
 
@@ -74,8 +74,7 @@ class Effects {
   }
 
   _callBack() {
-    if (!this.cb)
-      return;
+    if (!this.cb) return;
 
     this.cb();
     this.cb = null;

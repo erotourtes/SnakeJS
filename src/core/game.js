@@ -9,10 +9,8 @@ import { keyPressedHandler, ObstacleHandler } from "./handlers/module.js";
 import FruitFactory from "../fruit/fruitFactory.js";
 import { ParseTiles, isTouchDevice } from "../utils/module.js";
 
-
 class Game {
   gameLoopCbs = new Map();
-
 
   constructor() {
     const tileSize = this.calcTileSize();
@@ -34,7 +32,7 @@ class Game {
   get rawData() {
     const gameData = {
       obstacleHandler: this.obstacleHandler,
-    }
+    };
 
     return Object.assign({}, this.containerManager.rawData, gameData);
   }
@@ -46,12 +44,11 @@ class Game {
     this.obstacleHandler = new ObstacleHandler(this.field.field);
   }
 
-
   initFruitFactory() {
     this.fruitFactory = new FruitFactory(this.rawData);
 
     this.fruitFactory.onCreate((pos, prevPos) => {
-      prevPos = prevPos || pos; 
+      prevPos = prevPos || pos;
       this.obstacleHandler.updateField(pos, prevPos, "fruit");
     });
 
@@ -64,7 +61,7 @@ class Game {
 
   createSnake() {
     const [x, y] = this.rawData.canvasSize.cloneToTiles().raw();
-    const fruitWinCount =  Math.ceil(x * y / 15) + 3;
+    const fruitWinCount = Math.ceil((x * y) / 15) + 3;
 
     this.snake = new UiSnake(this.rawData, fruitWinCount);
 
@@ -94,7 +91,10 @@ class Game {
         this.effects.colorize(1000, () => this.resetUpdateRate());
       } else if (name === "invincible") {
         this.obstacleHandler._values["obstacle"] = 2;
-        this.effects.lsd(1000 * level, () => this.obstacleHandler._values["obstacle"] = 1);
+        this.effects.lsd(
+          1000 * level,
+          () => (this.obstacleHandler._values["obstacle"] = 1)
+        );
       }
 
       this.createFruit();
@@ -103,7 +103,7 @@ class Game {
     keyPressedHandler((direction) => this.snake.changeDirection(direction));
 
     this.gameLoopCbs.set(snakeID, () => {
-      this.snake.updatePosition(this.obstacleHandler)
+      this.snake.updatePosition(this.obstacleHandler);
     });
   }
 
@@ -111,9 +111,8 @@ class Game {
     let seconds = 0;
     this.containerManager.app.ticker.add((delta) => {
       seconds += (1 / 60) * delta;
-      if(seconds >= this.updateRate){
-        this.gameLoopCbs
-          .forEach((cb) => cb());
+      if (seconds >= this.updateRate) {
+        this.gameLoopCbs.forEach((cb) => cb());
 
         seconds = 0;
       }
@@ -131,11 +130,9 @@ class Game {
   }
 
   calcTileSize() {
-    if (isTouchDevice())
-      return 32;
+    if (isTouchDevice()) return 32;
     return 64;
   }
 }
-
 
 export default Game;

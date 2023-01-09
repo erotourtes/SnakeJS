@@ -2,9 +2,8 @@ import { Point } from "../core/physics/module.js";
 import { Graphics } from "pixi.js";
 import { EventEmitter } from "../utils/module.js";
 
-
 class FruitFactory {
-  constructor({canvasSize, tileSize, draw, obstacleHandler, remove}) {
+  constructor({ canvasSize, tileSize, draw, obstacleHandler, remove }) {
     this.canvasSize = canvasSize;
     this.tileSize = tileSize;
     this.obstacleHandler = obstacleHandler;
@@ -39,7 +38,8 @@ class FruitFactory {
     const [x, y] = pixelPoint.raw();
 
     const circle = new Graphics();
-    circle.beginFill(0xfffd98)
+    circle
+      .beginFill(0xfffd98)
       .drawRect(x, y, this.tileSize, this.tileSize)
       .endFill();
 
@@ -52,11 +52,9 @@ class FruitFactory {
 
   createEffect() {
     const rand = Math.floor(Math.random() * 10) + 1;
-    console.log(rand)
-    if (rand < 5) 
-      this.effect = { name: "invincible", level: rand };
-    else
-      this.effect = { name: "normal", level: rand };
+    console.log(rand);
+    if (rand < 5) this.effect = { name: "invincible", level: rand };
+    else this.effect = { name: "normal", level: rand };
   }
 }
 

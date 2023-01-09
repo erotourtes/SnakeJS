@@ -1,12 +1,12 @@
-import { Point }  from "../physics/module.js";
+import { Point } from "../physics/module.js";
 
 class ObstacleHandler {
   _values = {
-    "empty": 0,
-    "obstacle": 1,
-    "fruit": 2,
-    "snake": 3,
-  }
+    empty: 0,
+    obstacle: 1,
+    fruit: 2,
+    snake: 3,
+  };
 
   constructor(field) {
     this.field = field;
@@ -29,15 +29,11 @@ class ObstacleHandler {
   validePoint(point) {
     let [x, y] = point.raw();
 
-    if (x < 0) 
-      x = this.field[0].length - 1;
-    else if (x >= this.field[0].length)
-      x = 0;
+    if (x < 0) x = this.field[0].length - 1;
+    else if (x >= this.field[0].length) x = 0;
 
-    if (y < 0)
-      y = this.field.length - 1;
-    else if (y >= this.field.length)
-      y = 0;
+    if (y < 0) y = this.field.length - 1;
+    else if (y >= this.field.length) y = 0;
 
     return new Point(x, y);
   }
@@ -48,7 +44,8 @@ class ObstacleHandler {
 
     const [x, y] = point.raw();
     const value = this._values[name];
-    if (name === "snake" && !this._canUpdateField(point)) // updating field first and then wathing for collision
+    if (name === "snake" && !this._canUpdateField(point))
+      // updating field first and then wathing for collision
       return;
     this.field[y][x] = value;
   }
@@ -58,7 +55,8 @@ class ObstacleHandler {
 
     this.field.forEach((row, y) => {
       row.forEach((cell, x) => {
-        if (cell === this._values["empty"]) this._avaliableIndexes.push(new Point(x, y));
+        if (cell === this._values["empty"])
+          this._avaliableIndexes.push(new Point(x, y));
       });
     });
   }
@@ -69,10 +67,11 @@ class ObstacleHandler {
   }
 
   get randomPosition() {
-    if (this.wasUpdated)
-      this._updateAvaliableIndexes();
+    if (this.wasUpdated) this._updateAvaliableIndexes();
 
-    const randomIndex= Math.floor(Math.random() * this._avaliableIndexes.length);
+    const randomIndex = Math.floor(
+      Math.random() * this._avaliableIndexes.length
+    );
     const randomPoint = this._avaliableIndexes[randomIndex];
     return Point.of(randomPoint);
   }

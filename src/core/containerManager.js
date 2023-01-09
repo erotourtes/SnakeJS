@@ -1,8 +1,14 @@
-import { Application, Container, Graphics, Sprite, Texture, Text } from "pixi.js";
+import {
+  Application,
+  Container,
+  Graphics,
+  Sprite,
+  Texture,
+  Text,
+} from "pixi.js";
 
 import { Point } from "./physics/module.js";
 import { isTouchDevice } from "../utils/module.js";
-
 
 class ContainerManager {
   constructor(tileSize) {
@@ -12,7 +18,10 @@ class ContainerManager {
   }
 
   createApp() {
-    this.app = new Application({width: window.innerWidth, height: innerHeight});
+    this.app = new Application({
+      width: window.innerWidth,
+      height: innerHeight,
+    });
     document.body.appendChild(this.app.view);
     this.app.renderer.background.color = 0x202c39;
 
@@ -59,20 +68,19 @@ class ContainerManager {
 
     container.addChild(this._spriteForGameContainer);
 
-
     container.interactive = true;
 
     const onButtonUp = () => {
       this.app.stage.removeChild(container);
       this.clearGameContainer();
       onClick();
-    }
+    };
 
     container
-      .on('mouseup', onButtonUp)
-      .on('mouseupoutside', onButtonUp)
-      .on('touchend', onButtonUp)
-      .on('touchendoutside', onButtonUp);
+      .on("mouseup", onButtonUp)
+      .on("mouseupoutside", onButtonUp)
+      .on("touchend", onButtonUp)
+      .on("touchendoutside", onButtonUp);
 
     const textUi = new Text(text, {
       fontFamily: "Arial",
@@ -88,7 +96,7 @@ class ContainerManager {
 
     if (textUi.width > this._gameWidth) {
       textUi.style.fontSize = 36;
-      textUi.position.set(centerX + textUi.width/ 2, centerY);
+      textUi.position.set(centerX + textUi.width / 2, centerY);
     }
 
     container.addChild(textUi);
@@ -99,7 +107,8 @@ class ContainerManager {
   _drawLines() {
     for (let i = 0; i < Math.min(this._gameWidth / this.tileSize); i++) {
       const line = new Graphics();
-      line.lineStyle(1, 0x6D545D)
+      line
+        .lineStyle(1, 0x6d545d)
         .moveTo(i * this.tileSize, 0)
         .lineTo(i * this.tileSize, this._gameHeight);
       this.gameContainer.addChild(line);
@@ -111,7 +120,7 @@ class ContainerManager {
   }
 
   get removeFunction() {
-    return (el) => this.gameContainer.removeChild(el)
+    return (el) => this.gameContainer.removeChild(el);
   }
 
   get _spriteForGameContainer() {
@@ -125,23 +134,25 @@ class ContainerManager {
   }
 
   get _intAppWidth() {
-    return this.app.screen.width - this.app.screen.width % this.tileSize;
+    return this.app.screen.width - (this.app.screen.width % this.tileSize);
   }
 
   get _intAppHeight() {
-    return this.app.screen.height - this.app.screen.height % this.tileSize;
+    return this.app.screen.height - (this.app.screen.height % this.tileSize);
   }
 
   get _gameWidth() {
-    if (isTouchDevice())
-      return this._intAppWidth;
-    return this._intAppWidth * 0.8 - (this._intAppWidth * 0.8) % this.tileSize;
+    if (isTouchDevice()) return this._intAppWidth;
+    return (
+      this._intAppWidth * 0.8 - ((this._intAppWidth * 0.8) % this.tileSize)
+    );
   }
 
   get _gameHeight() {
-    if (isTouchDevice())
-      return this._intAppHeight;
-    return this._intAppHeight * 0.8 - (this._intAppHeight * 0.8) % this.tileSize;
+    if (isTouchDevice()) return this._intAppHeight;
+    return (
+      this._intAppHeight * 0.8 - ((this._intAppHeight * 0.8) % this.tileSize)
+    );
   }
 
   get _paddingLeft() {
@@ -152,10 +163,9 @@ class ContainerManager {
     return (this.app.screen.height - this._gameHeight) / 2;
   }
 
-  get canvaSize () {
+  get canvaSize() {
     return new Point(this._gameWidth, this._gameHeight);
   }
 }
-
 
 export default ContainerManager;

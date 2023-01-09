@@ -2,7 +2,6 @@ import Snake from "./snake.js";
 import { Graphics } from "pixi.js";
 import { Point, Vector } from "../core/physics/module.js";
 
-
 class UiSnake extends Snake {
   _bodyUI = [];
 
@@ -19,10 +18,9 @@ class UiSnake extends Snake {
 
   createBodyUI() {
     const circle = new Graphics();
-    circle.beginFill(0x5b8c5a)
-      .drawRect(
-        ...this.startPosition.raw(), 
-        this.tileSize, this.tileSize)
+    circle
+      .beginFill(0x5b8c5a)
+      .drawRect(...this.startPosition.raw(), this.tileSize, this.tileSize)
       .endFill();
     return circle;
   }
@@ -65,13 +63,12 @@ class UiSnake extends Snake {
       const [x, y] = this._body[i].raw();
       this._bodyUI[i].position.set(x, y);
 
-      if (this.head.equals(this._body[i]) && i !== 0)
-        this.lost();
+      if (this.head.equals(this._body[i]) && i !== 0) this.lost();
     }
   }
 
   handleEat(tilePos, prevPosition) {
-    if(this.obstacleHandler.isFruit(tilePos)) {
+    if (this.obstacleHandler.isFruit(tilePos)) {
       this._body.push(prevPosition);
 
       this.addBodyUI(new Vector(...prevPosition.raw()));
@@ -81,8 +78,7 @@ class UiSnake extends Snake {
   }
 
   handleWin() {
-    if(this.size === this.fruitWinCount)
-      this.eventEmitter.emit("win");
+    if (this.size === this.fruitWinCount) this.eventEmitter.emit("win");
   }
 
   handleCollide(tilePos) {

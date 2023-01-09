@@ -2,7 +2,7 @@ import { Sprite, Texture } from "pixi.js";
 import Field from "./field.js";
 
 class UiField extends Field {
-  constructor({canvasSize, tileSize}, obstacleCount) {
+  constructor({ canvasSize, tileSize }, obstacleCount) {
     super();
     this.pixelSize = canvasSize;
     this.tileSize = tileSize;

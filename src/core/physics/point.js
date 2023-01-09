@@ -33,10 +33,8 @@ class Point {
   }
 
   static of(point, vector) {
-    if (!point)
-      return null;
-    if (!vector)
-      return new Point(point.x, point.y);
+    if (!point) return null;
+    if (!vector) return new Point(point.x, point.y);
     return new Point(point.x + vector.x, point.y + vector.y);
   }
 }
