@@ -52,7 +52,6 @@ class FruitFactory {
 
   createEffect() {
     const rand = Math.floor(Math.random() * 10) + 1;
-    console.log(rand);
     if (rand < 5) this.effect = { name: "invincible", level: rand };
     else this.effect = { name: "normal", level: rand };
   }

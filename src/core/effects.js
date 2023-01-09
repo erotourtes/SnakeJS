@@ -52,7 +52,6 @@ class Effects {
     let count = 0;
 
     this.ticker.add(() => {
-      console.log("Workgin");
       const { matrix } = filter;
       count += 0.1;
       matrix[1] = Math.sin(count) * 3;
@@ -64,7 +63,6 @@ class Effects {
     });
 
     this.timer = setTimeout(() => {
-      console.log("stop");
       this.ticker.stop();
       this.ticker.destroy();
 
