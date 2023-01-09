@@ -29,14 +29,6 @@ class Game {
     this.initFruitFactory();
   }
 
-  get rawData() {
-    const gameData = {
-      obstacleHandler: this.obstacleHandler,
-    };
-
-    return Object.assign({}, this.containerManager.rawData, gameData);
-  }
-
   createField() {
     this.field = new UiField(this.rawData, 10);
     this.field.draw(this.containerManager.drawFunction);
@@ -118,11 +110,6 @@ class Game {
     });
   }
 
-  get fruitWinCount() {
-    const [x, y] = this.rawData.canvasSize.cloneToTiles().raw();
-    return Math.ceil((x * y) / 15) + 3;
-  }
-
   gameLoop() {
     let seconds = 0;
     this.containerManager.app.ticker.add((delta) => {
@@ -148,6 +135,19 @@ class Game {
   calcTileSize() {
     if (isTouchDevice()) return 32;
     return 64;
+  }
+
+  get fruitWinCount() {
+    const [x, y] = this.rawData.canvasSize.cloneToTiles().raw();
+    return Math.ceil((x * y) / 15) + 3;
+  }
+
+  get rawData() {
+    const gameData = {
+      obstacleHandler: this.obstacleHandler,
+    };
+
+    return Object.assign({}, this.containerManager.rawData, gameData);
   }
 }
 
