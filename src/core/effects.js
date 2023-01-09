@@ -2,80 +2,56 @@ import { filters, Ticker } from "pixi.js";
 
 class Effects {
   timer = null;
+  cb = null;
+  ticker = null;
 
   constructor(container) {
     this.container = container;
-    this.methods = {
-      "colorize": this.colorize,
-      "blackAndWhite": this.blackAndWhite,
-      "lsd": this.lsd,
-      "night": this.night,
-      "negative": this.negative,
-    }
   }
 
   clearNow() {
     this.container.filters = [];
     clearTimeout(this.timer);
+
+    this._callBack();
+
+    if (this.ticker) {
+      this.ticker.stop();
+      this.ticker.destroy();
+    }
   }
 
-  createEffect(ms) {
-    const keys = Object.keys(this.methods);
-    const randomKey = keys[Math.floor(Math.random() * keys.length)];
+  lsd(ms, cb) {
+    this.cb = cb;
 
-    const filter = this.methods[randomKey];
-
-    filter.call(this, ms);
-  }
-
-  negative(ms) {
-    const filter = new filters.ColorMatrixFilter();
-    filter.negative();
-    this.container.filters = [filter];
-    this.clear(ms);
-  }
-
-  night(ms) {
-    const filter = new filters.ColorMatrixFilter();
-    filter.night();
-    this.container.filters = [filter];
-
-    this.clear(ms);
-  }
-
-  lsd(ms) {
     const filter = new filters.ColorMatrixFilter();
     filter.lsd();
     this.container.filters = [filter];
 
-    this.clear(ms);
-  }
-
-  blackAndWhite(ms) {
-    const filter = new filters.ColorMatrixFilter();
-    filter.blackAndWhite();
-    this.container.filters = [filter];
-
-    this.clear(ms);
+    this.clear(ms, cb);
   }
 
   clear(ms) {
-    this.timer = 
-      setTimeout(() => {
-        this.container.filters = [];
-      }, ms);
+    this.timer = setTimeout(() => {
+      this.container.filters = [];
+      this.timer = null;
+      this._callBack();
+    }, ms);
   }
 
-  colorize(ms) {
+  colorize(ms, cb) {
+    this.clearNow();
+    this.cb = cb;
+
     const filter = new filters.ColorMatrixFilter();
     this.container.filters = [filter];
 
-    const ticker = Ticker.shared;
+    this.ticker =  Ticker.shared;
 
     let count = 0;
 
-    ticker.add(() => {
-      console.log("Workgin")
+    this.ticker.add(() => {
+      console.log("Workgin");
       const { matrix } = filter;
       count += 0.1;
       matrix[1] = Math.sin(count) * 3;
@@ -86,12 +62,23 @@ class Effects {
       matrix[6] = Math.sin(count / 4);
     });
 
-    setTimeout(() => {
+    this.timer = setTimeout(() => {
       console.log("stop");
-      ticker.stop();
-      ticker.destroy();
+      this.ticker.stop();
+      this.ticker.destroy();
+
       this.container.filters = [];
+
+      this._callBack();
     }, ms);
+  }
+
+  _callBack() {
+    if (!this.cb)
+      return;
+
+    this.cb();
+    this.cb = null;
   }
 }
 

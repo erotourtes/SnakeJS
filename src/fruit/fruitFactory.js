@@ -20,6 +20,7 @@ class FruitFactory {
     const fruitUi = this.fruitUi();
     this.fruit = fruitUi;
     this.draw(fruitUi);
+    this.createEffect();
 
     this.EventEmitter.emit("create", this.position, prevPosition, fruitUi);
   }
@@ -47,6 +48,15 @@ class FruitFactory {
 
   onCreate(cb) {
     this.EventEmitter.on("create", cb);
+  }
+
+  createEffect() {
+    const rand = Math.floor(Math.random() * 10) + 1;
+    console.log(rand)
+    if (rand < 5) 
+      this.effect = { name: "invincible", level: rand };
+    else
+      this.effect = { name: "normal", level: rand };
   }
 }
 

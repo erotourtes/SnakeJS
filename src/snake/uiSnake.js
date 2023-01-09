@@ -76,12 +76,12 @@ class UiSnake extends Snake {
 
       this.addBodyUI(new Vector(...prevPosition.raw()));
 
-      this.eventEmitter.emit("eat", tilePos);
+      this.eventEmitter.emit("eat", tilePos, this.size, this.fruitWinCount);
     }
   }
 
   handleWin() {
-    if(this._body.length === this.fruitWinCount)
+    if(this.size === this.fruitWinCount)
       this.eventEmitter.emit("win");
   }
 

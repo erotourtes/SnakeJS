@@ -7,7 +7,7 @@ class Snake {
     down: new Vector(0, 1),
     left: new Vector(-1, 0),
     right: new Vector(1, 0),
-    stoped: new Vector(0, 0)
+    stoped: new Vector(0, 0),
   };
 
   _forbidenDirections = {
@@ -25,15 +25,16 @@ class Snake {
     this._speed = speed;
     this.alive = true;
     this.eventEmitter = new EventEmitter();
-
   }
 
   changeDirection(direction) {
     const forbidenDir = this._forbidenDirections[this._currentDirection];
-    if(direction === forbidenDir 
-      || this._directions[direction] === undefined 
-      || !this.canChangeDirection)
-    return;
+    if (
+      direction === forbidenDir ||
+      this._directions[direction] === undefined ||
+      !this.canChangeDirection
+    )
+      return;
 
     this._currentDirection = direction;
     this.canChangeDirection = false;
@@ -41,7 +42,10 @@ class Snake {
 
   move() {
     const direction = this._directions[this._currentDirection];
-    const vector = new Vector(this._speed * direction.x, this._speed * direction.y)
+    const vector = new Vector(
+      this._speed * direction.x,
+      this._speed * direction.y
+    );
     this.moveAll(vector);
     this.canChangeDirection = true;
   }
@@ -89,6 +93,10 @@ class Snake {
 
   get head() {
     return this._body[0];
+  }
+
+  get size() {
+    return this._body.length;
   }
 }
 

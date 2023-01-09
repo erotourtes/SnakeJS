@@ -85,9 +85,19 @@ class Game {
       this.obstacleHandler.updateField(pos, prevPos, "snake");
     });
 
-    this.snake.onEat(() => {
+    this.snake.onEat((pos, count, countToWin) => {
+      const { name, level } = this.fruitFactory.effect;
+      const middleCount = Math.floor(countToWin / 2);
+
+      if (middleCount === count) {
+        this.reduceUpdateRate();
+        this.effects.colorize(1000, () => this.resetUpdateRate());
+      } else if (name === "invincible") {
+        this.obstacleHandler._values["obstacle"] = 2;
+        this.effects.lsd(1000 * level, () => this.obstacleHandler._values["obstacle"] = 1);
+      }
+
       this.createFruit();
-      this.effects.createEffect(1000);
     });
 
     keyPressedHandler((direction) => this.snake.changeDirection(direction));
@@ -101,13 +111,23 @@ class Game {
     let seconds = 0;
     this.containerManager.app.ticker.add((delta) => {
       seconds += (1 / 60) * delta;
-      if(seconds >= 0.2 ){
+      if(seconds >= this.updateRate){
         this.gameLoopCbs
           .forEach((cb) => cb());
 
         seconds = 0;
       }
     });
+  }
+
+  updateRate = 0.2;
+
+  reduceUpdateRate() {
+    this.updateRate /= 2;
+  }
+
+  resetUpdateRate() {
+    this.updateRate = 0.2;
   }
 
   calcTileSize() {
