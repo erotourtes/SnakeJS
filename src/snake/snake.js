@@ -17,6 +17,13 @@ class Snake {
     right: "left",
   };
 
+  _events = {
+    lost: "lost",
+    move: "move",
+    eat: "eat",
+    win: "win",
+  };
+
   _currentDirection = "stoped";
   _body = [];
 
@@ -65,20 +72,10 @@ class Snake {
     return this._body[0];
   }
 
-  onLost(cb) {
-    this.eventEmitter.on("lost", cb);
-  }
-
-  onMove(cb) {
-    this.eventEmitter.on("move", cb);
-  }
-
-  onEat(cb) {
-    this.eventEmitter.on("eat", cb);
-  }
-
-  onWin(cb) {
-    this.eventEmitter.on("win", cb);
+  on(eventName, cb) {
+    const event = this._events[eventName];
+    if (event)
+      this.eventEmitter.on(eventName, cb);
   }
 
   lost() {

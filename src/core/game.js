@@ -70,7 +70,7 @@ class Game {
   }
 
   onEatSnake() {
-    this.snake.onEat((pos, count, countToWin) => {
+    this.snake.on("eat", (pos, count, countToWin) => {
       const { name, level } = this.fruitFactory.effect;
       const middleCount = Math.floor(countToWin / 2);
 
@@ -90,13 +90,13 @@ class Game {
   }
 
   onMoveSnake() {
-    this.snake.onMove((pos, prevPos) =>
+    this.snake.on("move", (pos, prevPos) =>
       this.obstacleHandler.updateField(pos, prevPos, "snake")
     );
   }
 
   onWinSnake(snakeID) {
-    this.snake.onWin(() => {
+    this.snake.on("win", () => {
       this.gameLoopCbs.delete(snakeID);
       this.effects.clearNow();
       this.containerManager.gameWinScreen(() => this.start());
@@ -104,7 +104,7 @@ class Game {
   }
 
   onLostSnake(snakeID) {
-    this.snake.onLost(() => {
+    this.snake.on("lost", () => {
       this.gameLoopCbs.delete(snakeID);
       this.effects.clearNow();
       this.containerManager.gameOverScreen(() => this.start());
