@@ -17,13 +17,12 @@ class Game {
     this.containerManager = new ContainerManager(tileSize);
     ParseTiles.tileSize = tileSize;
 
-    this.init();
     this.gameLoop();
 
     this.effects = new Effects(this.containerManager.gameContainer);
   }
 
-  init() {
+  start() {
     this.createField();
     this.createSnake();
     this.initFruitFactory();
@@ -98,7 +97,7 @@ class Game {
     this.snake.onWin(() => {
       this.gameLoopCbs.delete(snakeID);
       this.effects.clearNow();
-      this.containerManager.gameWinScreen(() => this.init());
+      this.containerManager.gameWinScreen(() => this.start());
     });
   }
 
@@ -106,7 +105,7 @@ class Game {
     this.snake.onLost(() => {
       this.gameLoopCbs.delete(snakeID);
       this.effects.clearNow();
-      this.containerManager.gameOverScreen(() => this.init());
+      this.containerManager.gameOverScreen(() => this.start());
     });
   }
 
