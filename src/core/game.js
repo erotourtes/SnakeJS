@@ -1,10 +1,10 @@
 import ContainerManager from "./containerManager.js";
 import Effects from "./effects.js";
 
-import UiSnake from "../snake/module.js";
+import { SnakeBuilder } from "../snake/module.js";
 import UiField from "../field/module.js";
 
-import { keyPressedHandler, ObstacleHandler } from "./handlers/module.js";
+import { ObstacleHandler } from "./handlers/module.js";
 
 import FruitFactory from "../fruit/fruitFactory.js";
 import { ParseTiles, isTouchDevice, constants } from "../utils/module.js";
@@ -21,13 +21,13 @@ class Game {
 
     this.gameLoop();
 
-    this.effects = new Effects(this.containerManager.gameContainer);
   }
 
   start() {
     this.createField();
-    this.createSnake();
     this.initFruitFactory();
+    this.snakeBuilder = new SnakeBuilder(this.mechanics);
+    this.createSnake();
   }
 
   createField() {
@@ -53,61 +53,10 @@ class Game {
   }
 
   createSnake() {
-    this.snake = new UiSnake(this.rawData, this.fruitWinCount);
+    this.snake = this.snakeBuilder.createSnake();
 
-    const snakeID = Symbol("snake");
-
-    this.onLostSnake(snakeID);
-    this.onWinSnake(snakeID);
-    this.onMoveSnake();
-    this.onEatSnake();
-
-    keyPressedHandler((direction) => this.snake.changeDirection(direction));
-
-    this.gameLoopCbs.set(snakeID, () => {
+    this.gameLoopCbs.set(this.snake.id, () => {
       this.snake.updatePosition(this.obstacleHandler);
-    });
-  }
-
-  onEatSnake() {
-    this.snake.on("eat", (pos, count, countToWin) => {
-      const { name, level } = this.fruitFactory.effect;
-      const middleCount = Math.floor(countToWin / 2);
-
-      if (middleCount === count) {
-        this.reduceUpdateLimitBy(2);
-        this.effects.colorize(1000, () => this.resetUpdateRate());
-      } else if (name === "invincible") {
-        this.obstacleHandler._values["obstacle"] = 2;
-        this.effects.lsd(
-          1000 * level,
-          () => (this.obstacleHandler._values["obstacle"] = 1)
-        );
-      }
-
-      this.createFruit();
-    });
-  }
-
-  onMoveSnake() {
-    this.snake.on("move", (pos, prevPos) =>
-      this.obstacleHandler.updateField(pos, prevPos, "snake")
-    );
-  }
-
-  onWinSnake(snakeID) {
-    this.snake.on("win", () => {
-      this.gameLoopCbs.delete(snakeID);
-      this.effects.clearNow();
-      this.containerManager.gameWinScreen(() => this.start());
-    });
-  }
-
-  onLostSnake(snakeID) {
-    this.snake.on("lost", () => {
-      this.gameLoopCbs.delete(snakeID);
-      this.effects.clearNow();
-      this.containerManager.gameOverScreen(() => this.start());
     });
   }
 
@@ -136,17 +85,26 @@ class Game {
     return constants.LARGE_SCREEN;
   }
 
-  get fruitWinCount() {
-    const [x, y] = this.rawData.canvasSize.cloneToTiles().raw();
-    return Math.ceil((x * y) * constants.FRUIT_TO_FIELD_RATIO) + constants.MIN_FURIT;
-  }
-
   get rawData() {
     const gameData = {
       obstacleHandler: this.obstacleHandler,
     };
 
     return Object.assign({}, this.containerManager.rawData, gameData);
+  }
+
+  get mechanics() {
+    return { 
+      resetUpdateRate: this.resetUpdateRate.bind(this),
+      reduceUpdateLimitBy: this.reduceUpdateLimitBy.bind(this),
+      gameLoopCbs: this.gameLoopCbs,
+
+      fruitFactory: this.fruitFactory,
+      obstacleHandler: this.obstacleHandler,
+      containerManager: this.containerManager,
+      rawData: this.rawData,
+      start: this.start.bind(this),
+    };
   }
 }
 

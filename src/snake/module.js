@@ -1,3 +1,4 @@
 import UiSnake from "./uiSnake.js";
+import SnakeBuilder from "./snakeBuilder.js"
 
-export default UiSnake;
+export { UiSnake, SnakeBuilder };

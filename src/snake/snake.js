@@ -32,6 +32,7 @@ class Snake {
     this._speed = speed;
     this.alive = true;
     this.eventEmitter = new EventEmitter();
+    this.id = Symbol("snake");
   }
 
   changeDirection(direction) {
