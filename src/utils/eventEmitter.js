@@ -8,9 +8,10 @@ class EventEmitter {
   }
 
   emit(eventName, ...args) {
-    if (!this.events[eventName]) return;
+    const event = this.events[eventName];
+    if (!event) return;
 
-    this.events[eventName].forEach((cb) => cb(...args));
+    event.forEach((cb) => cb(...args));
   }
 }
 
