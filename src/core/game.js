@@ -7,15 +7,17 @@ import UiField from "../field/module.js";
 import { keyPressedHandler, ObstacleHandler } from "./handlers/module.js";
 
 import FruitFactory from "../fruit/fruitFactory.js";
-import { ParseTiles, isTouchDevice } from "../utils/module.js";
+import { ParseTiles, isTouchDevice, constants } from "../utils/module.js";
 
 class Game {
   gameLoopCbs = new Map();
 
   constructor() {
-    const tileSize = this.calcTileSize();
+    const tileSize = this.getTileSize();
     this.containerManager = new ContainerManager(tileSize);
     ParseTiles.tileSize = tileSize;
+
+    this.updateLimit = constants.UPDATE_RATE;
 
     this.gameLoop();
 
@@ -73,7 +75,7 @@ class Game {
       const middleCount = Math.floor(countToWin / 2);
 
       if (middleCount === count) {
-        this.reduceUpdateRate();
+        this.reduceUpdateLimitBy(2);
         this.effects.colorize(1000, () => this.resetUpdateRate());
       } else if (name === "invincible") {
         this.obstacleHandler._values["obstacle"] = 2;
@@ -110,35 +112,33 @@ class Game {
   }
 
   gameLoop() {
-    let seconds = 0;
+    let updateTimes = 0;
     this.containerManager.app.ticker.add((delta) => {
-      seconds += (1 / 60) * delta;
-      if (seconds >= this.updateRate) {
+      updateTimes +=  delta / constants.PIXI_UPDATE_COUNT;
+      if (updateTimes >= this.updateLimit) {
         this.gameLoopCbs.forEach((cb) => cb());
 
-        seconds = 0;
+        updateTimes = 0;
       }
     });
   }
 
-  updateRate = 0.2;
-
-  reduceUpdateRate() {
-    this.updateRate /= 2;
+  reduceUpdateLimitBy(times) {
+    this.updateLimit /= times;
   }
 
   resetUpdateRate() {
-    this.updateRate = 0.2;
+    this.updateLimit = constants.UPDATE_RATE;
   }
 
-  calcTileSize() {
-    if (isTouchDevice()) return 32;
-    return 64;
+  getTileSize() {
+    if (isTouchDevice()) return constants.SMALL_SCREEN
+    return constants.LARGE_SCREEN;
   }
 
   get fruitWinCount() {
     const [x, y] = this.rawData.canvasSize.cloneToTiles().raw();
-    return Math.ceil((x * y) / 15) + 3;
+    return Math.ceil((x * y) * constants.FRUIT_TO_FIELD_RATIO) + constants.MIN_FURIT;
   }
 
   get rawData() {
