@@ -5,10 +5,8 @@ import { constants } from "../utils/module.js";
 
 
 class SnakeBuilder {
-  constructor({ start, resetUpdateRate, reduceUpdateLimitBy, gameLoopCbs,  containerManager, fruitFactory,  obstacleHandler, rawData }) {
-    this.resetUpdateRate = resetUpdateRate;
-    this.reduceUpdateLimitBy = reduceUpdateLimitBy;
-    this.gameLoopCbs = gameLoopCbs;
+  constructor({ start, ticker, containerManager, fruitFactory,  obstacleHandler, rawData }) {
+    this.ticker = ticker;
 
     this.fruitFactory = fruitFactory;
     this.obstacleHandler = obstacleHandler;
@@ -39,8 +37,8 @@ class SnakeBuilder {
       const middleCount = Math.floor(countToWin / 2);
 
       if (middleCount === count) {
-        this.reduceUpdateLimitBy(2);
-        this.effects.colorize(1000, () => this.resetUpdateRate());
+        this.ticker.reduceUpdateLimitBy(2);
+        this.effects.colorize(1000, () => this.ticker.resetUpdateRate());
       } else if (name === "invincible") {
         this.obstacleHandler._values["obstacle"] = 2;
         this.effects.lsd(
@@ -61,7 +59,7 @@ class SnakeBuilder {
 
   onWinSnake() {
     this.snake.on("win", () => {
-      this.gameLoopCbs.delete(this.snake.id);
+      this.ticker.remove(this.snake.id);
       this.effects.clearNow();
       this.containerManager.gameWinScreen(() => this.start());
     });
@@ -69,7 +67,7 @@ class SnakeBuilder {
 
   onLostSnake() {
     this.snake.on("lost", () => {
-      this.gameLoopCbs.delete(this.snake.id);
+      this.ticker.remove(this.snake.id);
       this.effects.clearNow();
       this.containerManager.gameOverScreen(() => this.start());
     });

@@ -1,5 +1,4 @@
 import ContainerManager from "./containerManager.js";
-import Effects from "./effects.js";
 
 import { SnakeBuilder } from "../snake/module.js";
 import UiField from "../field/module.js";
@@ -9,8 +8,9 @@ import { ObstacleHandler } from "./handlers/module.js";
 import FruitFactory from "../fruit/fruitFactory.js";
 import { ParseTiles, isTouchDevice, constants } from "../utils/module.js";
 
+import Ticker from "./ticker.js";
+
 class Game {
-  gameLoopCbs = new Map();
 
   constructor() {
     const tileSize = this.getTileSize();
@@ -19,8 +19,8 @@ class Game {
 
     this.updateLimit = constants.UPDATE_RATE;
 
-    this.gameLoop();
-
+    this.ticker = new Ticker(this.containerManager.app);
+    this.ticker.startGameLoop();
   }
 
   start() {
@@ -55,29 +55,9 @@ class Game {
   createSnake() {
     this.snake = this.snakeBuilder.createSnake();
 
-    this.gameLoopCbs.set(this.snake.id, () => {
+    this.ticker.add(this.snake.id, () => {
       this.snake.updatePosition(this.obstacleHandler);
     });
-  }
-
-  gameLoop() {
-    let updateTimes = 0;
-    this.containerManager.app.ticker.add((delta) => {
-      updateTimes +=  delta / constants.PIXI_UPDATE_COUNT;
-      if (updateTimes >= this.updateLimit) {
-        this.gameLoopCbs.forEach((cb) => cb());
-
-        updateTimes = 0;
-      }
-    });
-  }
-
-  reduceUpdateLimitBy(times) {
-    this.updateLimit /= times;
-  }
-
-  resetUpdateRate() {
-    this.updateLimit = constants.UPDATE_RATE;
   }
 
   getTileSize() {
@@ -95,9 +75,7 @@ class Game {
 
   get mechanics() {
     return { 
-      resetUpdateRate: this.resetUpdateRate.bind(this),
-      reduceUpdateLimitBy: this.reduceUpdateLimitBy.bind(this),
-      gameLoopCbs: this.gameLoopCbs,
+      ticker: this.ticker,
 
       fruitFactory: this.fruitFactory,
       obstacleHandler: this.obstacleHandler,
