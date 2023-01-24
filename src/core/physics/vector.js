@@ -22,7 +22,7 @@ class Vector {
     return this._y;
   }
 
-  static formPoint(point) {
+  static fromPoint(point) {
     return new Vector(point.x, point.y);
   }
 }

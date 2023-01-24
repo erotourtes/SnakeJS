@@ -96,7 +96,7 @@ class UiSnake extends Snake {
   }
 
   clacRelativePosition(point) {
-    const reversed = Vector.formPoint(this.startPosition).multiply(-1);
+    const reversed = Vector.fromPoint(this.startPosition).multiply(-1);
     return Point.of(reversed, point);
   }
 }
