@@ -10,7 +10,6 @@
   "author": "erotourtes",
   "license": "ISC",
   "dependencies": {
-    "pixi.js": "^7.1.1",
     "serve": "^14.1.2"
   }
 }
