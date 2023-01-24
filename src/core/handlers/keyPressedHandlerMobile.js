@@ -15,8 +15,14 @@ const keyPressedHandlerMobile = (cb) => {
     let diffX = curX - startX;
     let diffY = curY - startY;
 
-    if (Math.abs(diffX) > Math.abs(diffY)) diffX < 0 ? cb("left") : cb("right");
-    else diffY < 0 ? cb("up") : cb("down");
+    const movedToSides = Math.abs(diffX) > Math.abs(diffY);
+    if (movedToSides) {
+      if (diffX < 0) cb("left");
+      else cb("right");
+    } else {
+      if (diffY < 0) cb("up");
+      else cb("down");
+    }
   };
 
   document.addEventListener("touchstart", handleTouchStart, false);
