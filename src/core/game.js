@@ -30,7 +30,7 @@ class Game {
   }
 
   createField() {
-    this.field = new UiField(this.rawData, 10);
+    this.field = new UiField(this.rawData, constants.OBSTACLES);
     this.field.draw(this.containerManager.drawFunction);
 
     this.obstacleHandler = new ObstacleHandler(this.field.field);

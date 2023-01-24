@@ -7,5 +7,7 @@ const constants = {
 
   MIN_FURIT: 3,
   FRUIT_TO_FIELD_RATIO: 1/15,
+
+  OBSTACLES: 10,
 }
 export default constants;
