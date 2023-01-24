@@ -27,6 +27,10 @@ class SnakeBuilder {
 
     keyPressedHandler((direction) => this.snake.changeDirection(direction));
 
+    this.ticker.add(this.snake.id, () => {
+      this.snake.updatePosition(this.obstacleHandler);
+    });
+
     return this.snake;
   }
 

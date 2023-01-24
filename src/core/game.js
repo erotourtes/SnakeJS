@@ -26,7 +26,6 @@ class Game {
   start() {
     this.createField();
     this.initFruitFactory();
-    this.snakeBuilder = new SnakeBuilder(this.mechanics);
     this.createSnake();
   }
 
@@ -53,11 +52,7 @@ class Game {
   }
 
   createSnake() {
-    this.snake = this.snakeBuilder.createSnake();
-
-    this.ticker.add(this.snake.id, () => {
-      this.snake.updatePosition(this.obstacleHandler);
-    });
+    this.snake = new SnakeBuilder(this.mechanics).createSnake();
   }
 
   getTileSize() {
