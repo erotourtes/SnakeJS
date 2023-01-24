@@ -76,9 +76,7 @@ class Game {
   get mechanics() {
     return { 
       ticker: this.ticker,
-
       fruitFactory: this.fruitFactory,
-      obstacleHandler: this.obstacleHandler,
       containerManager: this.containerManager,
       rawData: this.rawData,
       start: this.start.bind(this),

@@ -5,15 +5,14 @@ import { constants } from "../utils/module.js";
 
 
 class SnakeBuilder {
-  constructor({ start, ticker, containerManager, fruitFactory,  obstacleHandler, rawData }) {
+  constructor({ start, ticker, containerManager, fruitFactory, rawData }) {
     this.ticker = ticker;
 
     this.fruitFactory = fruitFactory;
-    this.obstacleHandler = obstacleHandler;
+    this.obstacleHandler = rawData.obstacleHandler;
     this.containerManager = containerManager;
     this.rawData = rawData;
     this.start = start;
-
 
     this.effects = new Effects(this.containerManager.gameContainer);
   }
@@ -24,7 +23,7 @@ class SnakeBuilder {
     this.onLostSnake();
     this.onWinSnake();
     this.onMoveSnake();
-    this.onEatSnake();
+    this.onEatSnake(this.fruitFactory);
 
     keyPressedHandler((direction) => this.snake.changeDirection(direction));
 
