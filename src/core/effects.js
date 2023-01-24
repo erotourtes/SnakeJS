@@ -37,6 +37,11 @@ class Effects {
       this.container.filters = [];
       this.timer = null;
       this._callBack();
+
+      if (this.ticker) {
+        this.ticker.stop();
+        this.ticker.destroy();
+      }
     }, ms);
   }
 
@@ -54,22 +59,14 @@ class Effects {
     this.ticker.add(() => {
       const { matrix } = filter;
       count += 0.1;
-      matrix[1] = Math.sin(count) * 3;
-      matrix[2] = Math.cos(count);
-      matrix[3] = Math.cos(count) * 1.5;
-      matrix[4] = Math.sin(count / 3) * 2;
-      matrix[5] = Math.sin(count / 2);
-      matrix[6] = Math.sin(count / 4);
+
+      const COLOR_OFFSET_START = 1;
+      const COLOR_OFFSET_END = 7;
+      for (let i = COLOR_OFFSET_START; i < COLOR_OFFSET_END; i++)
+        matrix[i] = Math.sin(count);
     });
 
-    this.timer = setTimeout(() => {
-      this.ticker.stop();
-      this.ticker.destroy();
-
-      this.container.filters = [];
-
-      this._callBack();
-    }, ms);
+    this.clear(ms);
   }
 
   _callBack() {
