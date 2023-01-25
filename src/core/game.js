@@ -44,10 +44,6 @@ class Game {
       this.obstacleHandler.updateField(pos, prevPos, "fruit");
     });
 
-    this.createFruit();
-  }
-
-  createFruit() {
     this.fruitFactory.create();
   }
 
