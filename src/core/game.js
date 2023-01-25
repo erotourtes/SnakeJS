@@ -11,7 +11,6 @@ import { ParseTiles, isTouchDevice, constants } from "../utils/module.js";
 import Ticker from "./ticker.js";
 
 class Game {
-
   constructor() {
     const tileSize = this.getTileSize();
     this.containerManager = new ContainerManager(tileSize);
@@ -39,11 +38,6 @@ class Game {
   initFruitFactory() {
     this.fruitFactory = new FruitFactory(this.rawData);
 
-    this.fruitFactory.onCreate((pos, prevPos) => {
-      prevPos = prevPos || pos;
-      this.obstacleHandler.updateField(pos, prevPos, "fruit");
-    });
-
     this.fruitFactory.create();
   }
 
@@ -52,7 +46,7 @@ class Game {
   }
 
   getTileSize() {
-    if (isTouchDevice()) return constants.SMALL_SCREEN
+    if (isTouchDevice()) return constants.SMALL_SCREEN;
     return constants.LARGE_SCREEN;
   }
 
@@ -65,7 +59,7 @@ class Game {
   }
 
   get mechanics() {
-    return { 
+    return {
       ticker: this.ticker,
       fruitFactory: this.fruitFactory,
       containerManager: this.containerManager,

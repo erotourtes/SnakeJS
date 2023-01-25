@@ -1,13 +1,11 @@
 import { Point } from "../core/physics/module.js";
 import { Graphics } from "pixi.js";
-import { EventEmitter } from "../utils/module.js";
 
 class FruitFactory {
   constructor({ canvasSize, tileSize, draw, obstacleHandler, remove }) {
     this.canvasSize = canvasSize;
     this.tileSize = tileSize;
     this.obstacleHandler = obstacleHandler;
-    this.EventEmitter = new EventEmitter();
     this.draw = draw;
     this.remove = remove;
   }
@@ -21,7 +19,8 @@ class FruitFactory {
     this.draw(fruitUi);
     this.createEffect();
 
-    this.EventEmitter.emit("create", this.position, prevPosition, fruitUi);
+    const pos = prevPosition || this.position;
+    this.obstacleHandler.updateField(this.position, pos, "fruit");
   }
 
   delete(fruitUi) {
@@ -44,10 +43,6 @@ class FruitFactory {
       .endFill();
 
     return circle;
-  }
-
-  onCreate(cb) {
-    this.EventEmitter.on("create", cb);
   }
 
   createEffect() {
