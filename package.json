@@ -4,12 +4,17 @@
   "description": "simple snake",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx serve"
+    "start": "npx serve",
+    "build": "node esbuild.config.mjs",
+    "preview": "node esbuild.config.mjs && npx serve"
   },
   "author": "erotourtes",
   "license": "ISC",
   "dependencies": {
-    "serve": "^14.1.2"
+    "pixi.js": "^7.2.4"
+  },
+  "devDependencies": {
+    "serve": "^14.1.2",
+    "esbuild": "^0.19.2"
   }
 }
